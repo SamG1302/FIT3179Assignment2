@@ -2,11 +2,17 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Overview + detail (NASA GISTEMP v4). Top: global annual anomaly with the trailing 10-year mean; drag across it to brush a period. Bottom: month x year heatmap that zooms to the brushed years. Both views are in one spec so the brush can link them.",
   "usermeta": {
-    "responsive": { "layout": "vconcat", "reserve": 84 }
+    "responsive": {
+      "layout": "vconcat",
+      "reserve": 84
+    }
   },
   "title": {
     "text": "Global temperature anomaly, 1880–2025",
-    "subtitle": ["Difference from the 1951–1980 average, °C · NASA GISTEMP v4", "Drag across the line chart to zoom the heatmap below"]
+    "subtitle": [
+      "Difference from the 1951–1980 average, °C · NASA GISTEMP v4",
+      "Drag across the line chart to zoom the heatmap below"
+    ]
   },
   "spacing": 28,
   "vconcat": [
@@ -15,75 +21,314 @@
       "height": 260,
       "data": {
         "url": "data/gistemp_global.csv",
-        "format": { "type": "csv", "parse": { "year": "number", "annual": "number", "mean_10yr": "number", "vs_1880_1900": "number" } }
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "annual": "number",
+            "mean_10yr": "number",
+            "vs_1880_1900": "number"
+          }
+        }
       },
-      "transform": [{ "filter": "isValid(datum.annual)" }],
+      "transform": [
+        {
+          "filter": "isValid(datum.annual)"
+        }
+      ],
       "layer": [
         {
           "description": "Zero line = the 1951–1980 average",
-          "mark": { "type": "rule", "color": "#9a968e", "strokeDash": [4, 3] },
-          "encoding": { "y": { "datum": 0, "type": "quantitative" } }
+          "mark": {
+            "type": "rule",
+            "color": "#9a968e",
+            "strokeDash": [
+              4,
+              3
+            ]
+          },
+          "encoding": {
+            "y": {
+              "datum": 0,
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "description": "Annotation: from 1977 every year is above the 1951–1980 average",
+          "mark": {
+            "type": "rule",
+            "color": "#5c6370",
+            "strokeDash": [
+              2,
+              3
+            ]
+          },
+          "encoding": {
+            "x": {
+              "datum": 1977,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            }
+          },
+          "data": {
+            "values": [
+              {}
+            ]
+          }
+        },
+        {
+          "description": "Annotation text for the 1977 line",
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "top",
+            "dx": -6,
+            "fontSize": 11,
+            "color": "#5c6370",
+            "lineHeight": 14
+          },
+          "encoding": {
+            "x": {
+              "datum": 1977,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.3,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "From 1977, every year is",
+                "above the 1951–1980 average"
+              ]
+            }
+          },
+          "data": {
+            "values": [
+              {}
+            ]
+          }
+        },
+        {
+          "description": "Annotation: the record year",
+          "transform": [
+            {
+              "filter": "datum.year == 2024"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -8,
+            "dy": 2,
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#1f2328"
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "annual",
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "2024: +1.28 °C, the warmest year"
+            }
+          }
         },
         {
           "description": "Annual values (muted) + the brush that drives the heatmap",
           "params": [
-            { "name": "brush", "select": { "type": "interval", "encodings": ["x"] } }
+            {
+              "name": "brush",
+              "select": {
+                "type": "interval",
+                "encodings": [
+                  "x"
+                ]
+              }
+            }
           ],
-          "mark": { "type": "line", "color": "#b9b6af", "strokeWidth": 1.5 },
+          "mark": {
+            "type": "line",
+            "color": "#b9b6af",
+            "strokeWidth": 1.5
+          },
           "encoding": {
             "x": {
               "field": "year",
               "type": "quantitative",
               "title": null,
-              "axis": { "format": "d", "grid": false, "tickCount": 10 },
-              "scale": { "domain": [1880, 2026], "nice": false }
+              "axis": {
+                "format": "d",
+                "grid": false,
+                "tickCount": 10
+              },
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
             },
             "y": {
               "field": "annual",
               "type": "quantitative",
               "title": "Anomaly (°C)",
-              "axis": { "format": "+.1f", "minExtent": 52 }
+              "axis": {
+                "format": "+.1f",
+                "minExtent": 52
+              }
             }
           }
         },
         {
           "description": "Trailing 10-year mean: the main story line",
-          "transform": [{ "filter": "isValid(datum.mean_10yr)" }],
-          "mark": { "type": "line", "color": "#b2182b", "strokeWidth": 2.5 },
+          "transform": [
+            {
+              "filter": "isValid(datum.mean_10yr)"
+            }
+          ],
+          "mark": {
+            "type": "line",
+            "color": "#b2182b",
+            "strokeWidth": 2.5
+          },
           "encoding": {
-            "x": { "field": "year", "type": "quantitative" },
-            "y": { "field": "mean_10yr", "type": "quantitative" }
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "mean_10yr",
+              "type": "quantitative"
+            }
           }
         },
         {
           "description": "Direct label instead of a legend",
           "transform": [
-            { "filter": "isValid(datum.mean_10yr)" },
-            { "joinaggregate": [{ "op": "max", "field": "year", "as": "last_year" }] },
-            { "filter": "datum.year === datum.last_year" }
+            {
+              "filter": "isValid(datum.mean_10yr)"
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "max",
+                  "field": "year",
+                  "as": "last_year"
+                }
+              ]
+            },
+            {
+              "filter": "datum.year === datum.last_year"
+            }
           ],
-          "mark": { "type": "text", "align": "right", "dx": -4, "dy": 16, "fontSize": 11, "fontWeight": 600, "color": "#b2182b" },
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -4,
+            "dy": 16,
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#b2182b"
+          },
           "encoding": {
-            "x": { "field": "year", "type": "quantitative" },
-            "y": { "field": "mean_10yr", "type": "quantitative" },
-            "text": { "value": "10-year average" }
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "mean_10yr",
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "10-year average"
+            }
           }
         },
         {
           "description": "Hover: nearest year carries the tooltip",
           "params": [
-            { "name": "hover", "select": { "type": "point", "fields": ["year"], "nearest": true, "on": "pointerover", "clear": "pointerout" } }
+            {
+              "name": "hover",
+              "select": {
+                "type": "point",
+                "fields": [
+                  "year"
+                ],
+                "nearest": true,
+                "on": "pointerover",
+                "clear": "pointerout"
+              }
+            }
           ],
-          "mark": { "type": "point", "size": 60, "filled": true, "color": "#1f2328" },
+          "mark": {
+            "type": "point",
+            "size": 60,
+            "filled": true,
+            "color": "#1f2328"
+          },
           "encoding": {
-            "x": { "field": "year", "type": "quantitative" },
-            "y": { "field": "annual", "type": "quantitative" },
-            "opacity": { "condition": { "param": "hover", "empty": false, "value": 1 }, "value": 0 },
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "annual",
+              "type": "quantitative"
+            },
+            "opacity": {
+              "condition": {
+                "param": "hover",
+                "empty": false,
+                "value": 1
+              },
+              "value": 0
+            },
             "tooltip": [
-              { "field": "year", "type": "quantitative", "title": "Year", "format": "d" },
-              { "field": "annual", "type": "quantitative", "title": "Anomaly (°C)", "format": "+.2f" },
-              { "field": "mean_10yr", "type": "quantitative", "title": "10-yr average (°C)", "format": "+.2f" },
-              { "field": "vs_1880_1900", "type": "quantitative", "title": "vs 1880–1900 (°C)", "format": "+.2f" }
+              {
+                "field": "year",
+                "type": "quantitative",
+                "title": "Year",
+                "format": "d"
+              },
+              {
+                "field": "annual",
+                "type": "quantitative",
+                "title": "Anomaly (°C)",
+                "format": "+.2f"
+              },
+              {
+                "field": "mean_10yr",
+                "type": "quantitative",
+                "title": "10-yr average (°C)",
+                "format": "+.2f"
+              },
+              {
+                "field": "vs_1880_1900",
+                "type": "quantitative",
+                "title": "vs 1880–1900 (°C)",
+                "format": "+.2f"
+              }
             ]
           }
         }
@@ -94,37 +339,108 @@
       "height": 190,
       "data": {
         "url": "data/gistemp_monthly.csv",
-        "format": { "type": "csv", "parse": { "year": "number", "month": "number", "anomaly": "number" } }
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "month": "number",
+            "anomaly": "number"
+          }
+        }
       },
-      "transform": [{ "calculate": "datum.year + 1", "as": "year_end" }],
-      "mark": { "type": "rect", "clip": true },
+      "transform": [
+        {
+          "calculate": "datum.year + 1",
+          "as": "year_end"
+        }
+      ],
+      "mark": {
+        "type": "rect",
+        "clip": true
+      },
       "encoding": {
         "x": {
           "field": "year",
           "type": "quantitative",
           "title": null,
-          "scale": { "domain": { "param": "brush" }, "nice": false },
-          "axis": { "format": "d", "grid": false, "tickCount": 10 }
+          "scale": {
+            "domain": {
+              "param": "brush"
+            },
+            "nice": false
+          },
+          "axis": {
+            "format": "d",
+            "grid": false,
+            "tickCount": 10
+          }
         },
-        "x2": { "field": "year_end" },
+        "x2": {
+          "field": "year_end"
+        },
         "y": {
           "field": "month_name",
           "type": "ordinal",
           "title": null,
-          "sort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          "axis": { "minExtent": 52, "ticks": false, "domain": false, "labelExpr": "indexof(['Jan','Apr','Jul','Oct'], datum.value) >= 0 ? datum.value : ''" }
+          "sort": [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ],
+          "axis": {
+            "minExtent": 52,
+            "ticks": false,
+            "domain": false,
+            "labelExpr": "indexof(['Jan','Apr','Jul','Oct'], datum.value) >= 0 ? datum.value : ''"
+          }
         },
         "color": {
           "field": "anomaly",
           "type": "quantitative",
           "title": "Monthly anomaly (°C)",
-          "scale": { "scheme": "redblue", "reverse": true, "domain": [-1.5, 1.5], "domainMid": 0, "clamp": true },
-          "legend": { "orient": "bottom", "direction": "horizontal", "gradientLength": 220, "format": "+.1f" }
+          "scale": {
+            "scheme": "redblue",
+            "reverse": true,
+            "domain": [
+              -1.5,
+              1.5
+            ],
+            "domainMid": 0,
+            "clamp": true
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 220,
+            "format": "+.1f"
+          }
         },
         "tooltip": [
-          { "field": "month_name", "title": "Month" },
-          { "field": "year", "type": "quantitative", "title": "Year", "format": "d" },
-          { "field": "anomaly", "type": "quantitative", "title": "Anomaly (°C)", "format": "+.2f" }
+          {
+            "field": "month_name",
+            "title": "Month"
+          },
+          {
+            "field": "year",
+            "type": "quantitative",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "anomaly",
+            "type": "quantitative",
+            "title": "Anomaly (°C)",
+            "format": "+.2f"
+          }
         ]
       }
     }

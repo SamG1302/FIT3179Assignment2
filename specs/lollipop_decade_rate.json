@@ -211,6 +211,38 @@
           }
         }
       }
+    },
+    {
+      "description": "Annotation: the run of warmer decades",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 11,
+        "color": "#5c6370",
+        "lineHeight": 14
+      },
+      "encoding": {
+        "x": {
+          "datum": "1890s",
+          "type": "ordinal"
+        },
+        "y": {
+          "datum": 0.3,
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "Since the 1960s, every decade",
+            "has been warmer than the last"
+          ]
+        }
+      },
+      "data": {
+        "values": [
+          {}
+        ]
+      }
     }
   ]
 }

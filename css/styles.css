@@ -1,5 +1,5 @@
 /* =========================================================================
-   FIT3179 A2 — page styles
+   FIT3179 A2: page styles
    Colours, fonts and spacing are defined once here as variables, so the
    whole page can be restyled from this block.
 
@@ -65,7 +65,7 @@ h1 {                       /* level 1: page title */
   font-size: 2.75rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  max-width: 20ch;
+  max-width: 24ch;
 }
 
 h2 {                       /* level 2: section heading */
@@ -287,4 +287,39 @@ code {
 .vis-fixed .vega-embed {
   max-width: 100%;
   min-width: 0;
+}
+
+/* ---- Reading guide (header) -------------------------------------------- */
+.reading-guide {
+  margin-top: 28px;
+  padding: 18px 24px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.reading-guide p {
+  max-width: none;
+  margin-bottom: 0.8em;
+}
+
+.guide-title {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: -1px;
+}
+
+.swatch-warm { background: #b2182b; }
+.swatch-cool { background: #2166ac; }
+
+.section-intro + .section-intro {
+  margin-top: -0.2em;
 }

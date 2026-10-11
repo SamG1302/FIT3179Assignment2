@@ -65,7 +65,14 @@ const THEME = {
   }
 };
 
-const EMBED_OPTIONS = { actions: false, config: THEME };
+// "no-cache" makes the browser check GitHub Pages for a newer copy of each
+// spec and data file (it still re-uses its copy if nothing changed), so an
+// update never shows old charts next to the new page.
+const EMBED_OPTIONS = {
+  actions: false,
+  config: THEME,
+  loader: vega.loader({ http: { cache: "no-cache" } })
+};
 
 // ----------------------------------------------------------------------------
 // Responsive widths for multi-view specs.
@@ -103,7 +110,7 @@ async function embed({ id, spec: specUrl }) {
   const el = document.querySelector(id);
   if (!el) return;
   try {
-    const spec = await (await fetch(specUrl)).json();
+    const spec = await (await fetch(specUrl, { cache: "no-cache" })).json();
     if (!(spec.usermeta && spec.usermeta.responsive)) {
       await vegaEmbed(id, spec, EMBED_OPTIONS);          // single/layered: "container" handles width
       return;
