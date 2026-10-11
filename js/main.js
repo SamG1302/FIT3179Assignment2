@@ -34,6 +34,7 @@ const VISUALISATIONS = [
 // A "config" block inside a single spec overrides these values for that chart.
 const THEME = {
   background: null,                       // transparent: the page colour shows through
+  padding: { left: 0, top: 5, right: 5, bottom: 5 },  // chart titles line up with the page text
   font: "Inter, system-ui, sans-serif",
   view: { stroke: null },                 // no box around plots (data-ink ratio)
   axis: {

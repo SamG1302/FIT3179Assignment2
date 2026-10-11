@@ -4,7 +4,7 @@
   "title": {
     "text": "Australia: every season is warmer, spring and summer most",
     "subtitle": [
-      "Change in season-average temperature since 1951–1980, °C",
+      "Change since each season's 1951–1980 average, °C",
       "Our World in Data (ERA5) · summer = Dec–Feb"
     ]
   },
@@ -114,7 +114,7 @@
     "x": {
       "field": "period",
       "type": "ordinal",
-      "title": null,
+      "title": "Period compared",
       "scale": {
         "padding": 0.6
       },
@@ -221,28 +221,6 @@
       "encoding": {
         "text": {
           "field": "end_label"
-        },
-        "color": null
-      }
-    },
-    {
-      "description": "Left label: shared starting point",
-      "transform": [
-        {
-          "filter": "datum.period == '1951–1980' && datum.season == 'Summer'"
-        }
-      ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 8,
-        "dy": -10,
-        "fontSize": 10,
-        "color": "#5c6370"
-      },
-      "encoding": {
-        "text": {
-          "value": "all seasons start at their 1951–1980 average"
         },
         "color": null
       }

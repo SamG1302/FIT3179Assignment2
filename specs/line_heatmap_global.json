@@ -84,6 +84,49 @@
           }
         },
         {
+          "description": "Annotation text for the 1977 line (white halo behind the text)",
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "top",
+            "dx": -6,
+            "fontSize": 11,
+            "color": "#5c6370",
+            "lineHeight": 14,
+            "stroke": "#fcfcfb",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1977,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.3,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "From 1977, every year is",
+                "above the 1951–1980 average"
+              ]
+            }
+          },
+          "data": {
+            "values": [
+              {}
+            ]
+          }
+        },
+        {
           "description": "Annotation text for the 1977 line",
           "mark": {
             "type": "text",
@@ -121,6 +164,39 @@
             "values": [
               {}
             ]
+          }
+        },
+        {
+          "description": "Annotation: the record year (white halo behind the text)",
+          "transform": [
+            {
+              "filter": "datum.year == 2024"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -8,
+            "dy": 2,
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#1f2328",
+            "stroke": "#fcfcfb",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "annual",
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "2024: +1.28 °C, the warmest year"
+            }
           }
         },
         {
@@ -175,7 +251,7 @@
             "x": {
               "field": "year",
               "type": "quantitative",
-              "title": null,
+              "title": "Year",
               "axis": {
                 "format": "d",
                 "grid": false,
@@ -220,48 +296,6 @@
             "y": {
               "field": "mean_10yr",
               "type": "quantitative"
-            }
-          }
-        },
-        {
-          "description": "Direct label instead of a legend",
-          "transform": [
-            {
-              "filter": "isValid(datum.mean_10yr)"
-            },
-            {
-              "joinaggregate": [
-                {
-                  "op": "max",
-                  "field": "year",
-                  "as": "last_year"
-                }
-              ]
-            },
-            {
-              "filter": "datum.year === datum.last_year"
-            }
-          ],
-          "mark": {
-            "type": "text",
-            "align": "right",
-            "dx": -4,
-            "dy": 16,
-            "fontSize": 11,
-            "fontWeight": 600,
-            "color": "#b2182b"
-          },
-          "encoding": {
-            "x": {
-              "field": "year",
-              "type": "quantitative"
-            },
-            "y": {
-              "field": "mean_10yr",
-              "type": "quantitative"
-            },
-            "text": {
-              "value": "10-year average"
             }
           }
         },
@@ -331,6 +365,78 @@
               }
             ]
           }
+        },
+        {
+          "description": "Mini legend in the empty top-left corner (replaces a label that collided with the line): red line",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#b2182b"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1883,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.3,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "10-year average"
+            }
+          }
+        },
+        {
+          "description": "Mini legend: grey line",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "color": "#8a867e"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1883,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.13,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "Single year"
+            }
+          }
         }
       ]
     },
@@ -350,6 +456,9 @@
       },
       "transform": [
         {
+          "filter": "datum.year <= 2025"
+        },
+        {
           "calculate": "datum.year + 1",
           "as": "year_end"
         }
@@ -362,7 +471,7 @@
         "x": {
           "field": "year",
           "type": "quantitative",
-          "title": null,
+          "title": "Year",
           "scale": {
             "domain": {
               "param": "brush"
@@ -381,7 +490,7 @@
         "y": {
           "field": "month_name",
           "type": "ordinal",
-          "title": null,
+          "title": "Month",
           "sort": [
             "Jan",
             "Feb",
@@ -442,7 +551,8 @@
             "format": "+.2f"
           }
         ]
-      }
+      },
+      "description": "Month x year heatmap (complete years 1880–2025, so its x range matches the line chart above)"
     }
   ]
 }

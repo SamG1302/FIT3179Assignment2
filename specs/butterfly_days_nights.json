@@ -2,95 +2,320 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Butterfly chart: how much warmer global land daytime highs (left) and night-time lows (right) were in each decade than in the 1950s (Berkeley Earth GlobalTemperatures, be_global_land.csv). Three side-by-side panels share one data source and the same x range. Data end in 2015.",
   "usermeta": {
-    "responsive": { "layout": "butterfly", "reserve": 84, "middle": 64 }
+    "responsive": {
+      "layout": "butterfly",
+      "reserve": 84,
+      "middle": 90
+    }
   },
   "title": {
     "text": "Nights warmed first; days have caught up",
-    "subtitle": ["Global land, change since the 1950s, °C · Berkeley Earth", "Data end in 2015, so the 2010s cover 2010–2015 only"],
+    "subtitle": [
+      "Global land, change since the 1950s, °C · Berkeley Earth",
+      "Data end in 2015, so the 2010s cover 2010–2015 only"
+    ],
     "anchor": "middle"
   },
-  "data": { "url": "data/be_global_land.csv" },
+  "data": {
+    "url": "data/be_global_land.csv"
+  },
   "transform": [
-    { "calculate": "floor(datum.year / 10) * 10", "as": "decade" },
-    { "filter": "datum.decade >= 1950 && datum.decade <= 2010" },
+    {
+      "calculate": "floor(datum.year / 10) * 10",
+      "as": "decade"
+    },
+    {
+      "filter": "datum.decade >= 1950 && datum.decade <= 2010"
+    },
     {
       "aggregate": [
-        { "op": "mean", "field": "land_max_anom", "as": "day" },
-        { "op": "mean", "field": "land_min_anom", "as": "night" }
-      ],
-      "groupby": ["decade"]
-    },
-    { "calculate": "datum.decade == 1950 ? datum.day : null", "as": "day_base" },
-    { "calculate": "datum.decade == 1950 ? datum.night : null", "as": "night_base" },
-    { "joinaggregate": [{ "op": "max", "field": "day_base", "as": "day_1950" }, { "op": "max", "field": "night_base", "as": "night_1950" }] },
-    { "calculate": "datum.day - datum.day_1950", "as": "day_change" },
-    { "calculate": "datum.night - datum.night_1950", "as": "night_change" },
-    { "filter": "datum.decade > 1950" },
-    { "calculate": "datum.decade == 2010 ? '2010–15' : datum.decade + 's'", "as": "decade_label" }
-  ],
-  "spacing": 0,
-  "hconcat": [
-    {
-      "title": { "text": "Daytime highs", "color": "#d96d00", "fontSize": 13, "anchor": "end", "font": "Inter, system-ui, sans-serif" },
-      "width": 380,
-      "height": { "step": 30 },
-      "encoding": {
-        "y": { "field": "decade_label", "type": "ordinal", "sort": { "field": "decade", "order": "descending" }, "axis": null },
-        "x": {
-          "field": "day_change",
-          "type": "quantitative",
-          "title": "°C vs 1950s",
-          "scale": { "domain": [-0.1, 1.4], "reverse": true, "nice": false },
-          "axis": { "format": ".1f", "values": [0, 0.5, 1], "grid": false }
-        },
-        "tooltip": [
-          { "field": "decade_label", "title": "Decade" },
-          { "field": "day_change", "type": "quantitative", "title": "Daytime highs (°C vs 1950s)", "format": "+.2f" },
-          { "field": "night_change", "type": "quantitative", "title": "Night-time lows (°C vs 1950s)", "format": "+.2f" }
-        ]
-      },
-      "layer": [
-        { "mark": { "type": "bar", "color": "#d96d00", "cornerRadiusEnd": 3, "height": { "band": 0.7 } } },
         {
-          "mark": { "type": "text", "align": "right", "dx": -5, "fontSize": 10, "color": "#5c6370" },
-          "encoding": { "text": { "field": "day_change", "type": "quantitative", "format": "+.2f" } }
+          "op": "mean",
+          "field": "land_max_anom",
+          "as": "day"
+        },
+        {
+          "op": "mean",
+          "field": "land_min_anom",
+          "as": "night"
+        }
+      ],
+      "groupby": [
+        "decade"
+      ]
+    },
+    {
+      "calculate": "datum.decade == 1950 ? datum.day : null",
+      "as": "day_base"
+    },
+    {
+      "calculate": "datum.decade == 1950 ? datum.night : null",
+      "as": "night_base"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "day_base",
+          "as": "day_1950"
+        },
+        {
+          "op": "max",
+          "field": "night_base",
+          "as": "night_1950"
         }
       ]
     },
     {
-      "width": 64,
-      "height": { "step": 30 },
-      "view": { "stroke": null },
-      "mark": { "type": "text", "fontSize": 11, "fontWeight": 600, "color": "#1f2328" },
+      "calculate": "datum.day - datum.day_1950",
+      "as": "day_change"
+    },
+    {
+      "calculate": "datum.night - datum.night_1950",
+      "as": "night_change"
+    },
+    {
+      "filter": "datum.decade > 1950"
+    },
+    {
+      "calculate": "max(datum.day_change, 0)",
+      "as": "day_label_pos"
+    },
+    {
+      "calculate": "max(datum.night_change, 0)",
+      "as": "night_label_pos"
+    },
+    {
+      "calculate": "datum.decade == 2010 ? '2010–15' : datum.decade + 's'",
+      "as": "decade_label"
+    }
+  ],
+  "spacing": 0,
+  "hconcat": [
+    {
+      "title": {
+        "text": "Daytime highs",
+        "color": "#d96d00",
+        "fontSize": 13,
+        "anchor": "end",
+        "font": "Inter, system-ui, sans-serif"
+      },
+      "width": 380,
+      "height": {
+        "step": 30
+      },
       "encoding": {
-        "y": { "field": "decade_label", "type": "ordinal", "sort": { "field": "decade", "order": "descending" }, "axis": null },
-        "text": { "field": "decade_label" }
+        "y": {
+          "field": "decade_label",
+          "type": "ordinal",
+          "sort": {
+            "field": "decade",
+            "order": "descending"
+          },
+          "axis": null
+        },
+        "x": {
+          "field": "day_change",
+          "type": "quantitative",
+          "title": "°C vs 1950s",
+          "scale": {
+            "domain": [
+              -0.1,
+              1.4
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": {
+            "format": ".1f",
+            "values": [
+              0,
+              0.5,
+              1
+            ],
+            "grid": false
+          }
+        },
+        "tooltip": [
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "day_change",
+            "type": "quantitative",
+            "title": "Daytime highs (°C vs 1950s)",
+            "format": "+.2f"
+          },
+          {
+            "field": "night_change",
+            "type": "quantitative",
+            "title": "Night-time lows (°C vs 1950s)",
+            "format": "+.2f"
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "color": "#d96d00",
+            "cornerRadiusEnd": 3,
+            "height": {
+              "band": 0.7
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -5,
+            "fontSize": 10,
+            "color": "#5c6370"
+          },
+          "encoding": {
+            "text": {
+              "field": "day_change",
+              "type": "quantitative",
+              "format": "+.2f"
+            },
+            "x": {
+              "field": "day_label_pos",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 90,
+      "height": {
+        "step": 30
+      },
+      "view": {
+        "stroke": null
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "y": {
+          "field": "decade_label",
+          "type": "ordinal",
+          "sort": {
+            "field": "decade",
+            "order": "descending"
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "decade_label"
+        }
+      },
+      "title": {
+        "text": "Decade",
+        "fontSize": 13,
+        "anchor": "middle",
+        "font": "Inter, system-ui, sans-serif",
+        "color": "#1f2328"
       }
     },
     {
-      "title": { "text": "Night-time lows", "color": "#5e3c99", "fontSize": 13, "anchor": "start", "font": "Inter, system-ui, sans-serif" },
+      "title": {
+        "text": "Night-time lows",
+        "color": "#5e3c99",
+        "fontSize": 13,
+        "anchor": "start",
+        "font": "Inter, system-ui, sans-serif"
+      },
       "width": 380,
-      "height": { "step": 30 },
+      "height": {
+        "step": 30
+      },
       "encoding": {
-        "y": { "field": "decade_label", "type": "ordinal", "sort": { "field": "decade", "order": "descending" }, "axis": null },
+        "y": {
+          "field": "decade_label",
+          "type": "ordinal",
+          "sort": {
+            "field": "decade",
+            "order": "descending"
+          },
+          "axis": null
+        },
         "x": {
           "field": "night_change",
           "type": "quantitative",
           "title": "°C vs 1950s",
-          "scale": { "domain": [-0.1, 1.4], "nice": false },
-          "axis": { "format": ".1f", "values": [0, 0.5, 1], "grid": false }
+          "scale": {
+            "domain": [
+              -0.1,
+              1.4
+            ],
+            "nice": false
+          },
+          "axis": {
+            "format": ".1f",
+            "values": [
+              0,
+              0.5,
+              1
+            ],
+            "grid": false
+          }
         },
         "tooltip": [
-          { "field": "decade_label", "title": "Decade" },
-          { "field": "day_change", "type": "quantitative", "title": "Daytime highs (°C vs 1950s)", "format": "+.2f" },
-          { "field": "night_change", "type": "quantitative", "title": "Night-time lows (°C vs 1950s)", "format": "+.2f" }
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "day_change",
+            "type": "quantitative",
+            "title": "Daytime highs (°C vs 1950s)",
+            "format": "+.2f"
+          },
+          {
+            "field": "night_change",
+            "type": "quantitative",
+            "title": "Night-time lows (°C vs 1950s)",
+            "format": "+.2f"
+          }
         ]
       },
       "layer": [
-        { "mark": { "type": "bar", "color": "#5e3c99", "cornerRadiusEnd": 3, "height": { "band": 0.7 } } },
         {
-          "mark": { "type": "text", "align": "left", "dx": 5, "fontSize": 10, "color": "#5c6370" },
-          "encoding": { "text": { "field": "night_change", "type": "quantitative", "format": "+.2f" } }
+          "mark": {
+            "type": "bar",
+            "color": "#5e3c99",
+            "cornerRadiusEnd": 3,
+            "height": {
+              "band": 0.7
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 5,
+            "fontSize": 10,
+            "color": "#5c6370"
+          },
+          "encoding": {
+            "text": {
+              "field": "night_change",
+              "type": "quantitative",
+              "format": "+.2f"
+            },
+            "x": {
+              "field": "night_label_pos",
+              "type": "quantitative"
+            }
+          }
         }
       ]
     }

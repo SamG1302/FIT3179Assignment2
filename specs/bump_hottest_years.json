@@ -17,10 +17,10 @@
     "x": {
       "field": "as_of",
       "type": "quantitative",
-      "title": "Year the ranking was made",
+      "title": "Year the ranking was made (last column = 2025)",
       "scale": {
         "domain": [
-          1980,
+          1978,
           2025
         ],
         "nice": false
@@ -30,17 +30,12 @@
         "grid": false,
         "values": [
           1980,
-          1985,
           1990,
-          1995,
           2000,
-          2005,
           2010,
-          2015,
-          2020,
-          2025
+          2020
         ],
-        "labelExpr": "datum.value % 10 == 0 || datum.value == 2025 ? datum.label : ''"
+        "tickCount": 5
       }
     },
     "y": {

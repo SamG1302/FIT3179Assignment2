@@ -94,7 +94,7 @@
         "x": {
           "field": "decade_label",
           "type": "ordinal",
-          "title": null,
+          "title": "Decade",
           "sort": {
             "field": "decade"
           },

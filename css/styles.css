@@ -323,3 +323,49 @@ code {
 .section-intro + .section-intro {
   margin-top: -0.2em;
 }
+
+/* ---- Alignment fixes ---------------------------------------------------- */
+/* In two-column rows both cells are the same height; push each caption to the
+   bottom so the two captions sit on one line. */
+.row-2 > .col > .figure {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.row-2 > .col > .figure > .caption {
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+/* Slider / dropdown controls: label, control and value on one baseline,
+   with space so the value never touches the slider handle */
+.vega-bind,
+.vega-bind > label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vega-bind-name {
+  margin-right: 0;
+}
+
+.vega-bind input[type="range"] {
+  margin: 0;
+  width: 200px;
+}
+
+.vega-bind-radio label,
+.vega-bind span:last-child {
+  min-width: 3ch;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Byline under the title */
+.byline {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-top: 12px;
+}

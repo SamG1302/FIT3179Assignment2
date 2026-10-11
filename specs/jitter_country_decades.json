@@ -155,7 +155,7 @@
     "x": {
       "field": "x_pos",
       "type": "quantitative",
-      "title": null,
+      "title": "Decade",
       "scale": {
         "domain": [
           1940,
@@ -324,6 +324,31 @@
             "format": "+.2f"
           }
         ]
+      }
+    },
+    {
+      "description": "Label the highlighted country at its latest dot (white halo)",
+      "transform": [
+        {
+          "filter": "datum.map_id == focus && datum.decade == 2020"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -8,
+        "dy": -10,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#b2182b",
+        "stroke": "#fcfcfb",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "text": {
+          "field": "country"
+        }
       }
     },
     {
