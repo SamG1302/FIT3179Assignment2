@@ -1,0 +1,251 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Slope chart: how much warmer each Australian season was in 2000–2025 than in 1951–1980 (OWID / ERA5 monthly, owid_monthly_focus.csv). Every season starts at 0 (its own 1951–1980 average), so the slope is the warming. Summer = Dec–Feb, with December counted toward the following summer. Line colour = amount of warming; labels replace a legend.",
+  "title": {
+    "text": "Australia: every season is warmer, spring and summer most",
+    "subtitle": [
+      "Change in season-average temperature since 1951–1980, °C",
+      "Our World in Data (ERA5) · summer = Dec–Feb"
+    ]
+  },
+  "width": "container",
+  "height": 430,
+  "data": {
+    "url": "data/owid_monthly_focus.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "year": "number",
+        "month": "number",
+        "anomaly": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.entity == 'Australia'"
+    },
+    {
+      "calculate": "datum.month == 12 || datum.month <= 2 ? 'Summer' : datum.month <= 5 ? 'Autumn' : datum.month <= 8 ? 'Winter' : 'Spring'",
+      "as": "season"
+    },
+    {
+      "calculate": "datum.month == 12 ? datum.year + 1 : datum.year",
+      "as": "season_year"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "mean",
+          "field": "anomaly",
+          "as": "season_anom"
+        },
+        {
+          "op": "count",
+          "as": "n"
+        }
+      ],
+      "groupby": [
+        "season",
+        "season_year"
+      ]
+    },
+    {
+      "filter": "datum.n == 3"
+    },
+    {
+      "calculate": "datum.season_year >= 1951 && datum.season_year <= 1980 ? '1951–1980' : datum.season_year >= 2000 && datum.season_year <= 2025 ? '2000–2025' : null",
+      "as": "period"
+    },
+    {
+      "filter": "datum.period != null"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "mean",
+          "field": "season_anom",
+          "as": "anomaly"
+        }
+      ],
+      "groupby": [
+        "season",
+        "period"
+      ]
+    },
+    {
+      "calculate": "datum.period == '1951–1980' ? datum.anomaly : null",
+      "as": "early"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "mean",
+          "field": "early",
+          "as": "early_mean"
+        }
+      ],
+      "groupby": [
+        "season"
+      ]
+    },
+    {
+      "calculate": "datum.anomaly - datum.early_mean",
+      "as": "change"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "change",
+          "as": "season_change"
+        }
+      ],
+      "groupby": [
+        "season"
+      ]
+    },
+    {
+      "calculate": "datum.season + '  ' + format(datum.season_change, '+.2f') + ' °C'",
+      "as": "end_label"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "period",
+      "type": "ordinal",
+      "title": null,
+      "scale": {
+        "padding": 0.6
+      },
+      "axis": {
+        "labelAngle": 0,
+        "ticks": false,
+        "domain": false,
+        "labelFontSize": 12,
+        "labelFontWeight": 600,
+        "labelColor": "#1f2328"
+      }
+    },
+    "y": {
+      "field": "change",
+      "type": "quantitative",
+      "title": "Warmer than 1951–1980 by (°C)",
+      "scale": {
+        "domain": [
+          -0.05,
+          0.8
+        ],
+        "nice": false
+      },
+      "axis": {
+        "format": "+.1f",
+        "values": [
+          0,
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ]
+      }
+    },
+    "color": {
+      "field": "season_change",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          0.8
+        ],
+        "range": [
+          "#f4c7b0",
+          "#b2182b"
+        ]
+      },
+      "legend": null
+    },
+    "detail": {
+      "field": "season"
+    },
+    "tooltip": [
+      {
+        "field": "season",
+        "title": "Season"
+      },
+      {
+        "field": "period",
+        "title": "Period"
+      },
+      {
+        "field": "change",
+        "type": "quantitative",
+        "title": "vs 1951–1980 (°C)",
+        "format": "+.2f"
+      },
+      {
+        "field": "anomaly",
+        "type": "quantitative",
+        "title": "vs 1991–2020 (°C, as supplied)",
+        "format": "+.2f"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 80,
+        "opacity": 1
+      }
+    },
+    {
+      "description": "Right labels: season + how much it warmed",
+      "transform": [
+        {
+          "filter": "datum.period == '2000–2025'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 11,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "text": {
+          "field": "end_label"
+        },
+        "color": null
+      }
+    },
+    {
+      "description": "Left label: shared starting point",
+      "transform": [
+        {
+          "filter": "datum.period == '1951–1980' && datum.season == 'Summer'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "dy": -10,
+        "fontSize": 10,
+        "color": "#5c6370"
+      },
+      "encoding": {
+        "text": {
+          "value": "all seasons start at their 1951–1980 average"
+        },
+        "color": null
+      }
+    }
+  ]
+}

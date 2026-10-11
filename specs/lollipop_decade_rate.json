@@ -1,0 +1,216 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Lollipop chart: change in global decade-average anomaly (NASA GISTEMP v4) from one decade to the next. Longer red stems = faster warming.",
+  "title": {
+    "text": "How much warmer each decade was than the one before",
+    "subtitle": [
+      "Change in decade-average anomaly, °C · NASA GISTEMP v4",
+      "2020s = 2020–2025 only (faded)"
+    ]
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "data/gistemp_global.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "year": "number",
+        "annual": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.annual)"
+    },
+    {
+      "calculate": "floor(datum.year / 10) * 10",
+      "as": "decade"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "mean",
+          "field": "annual",
+          "as": "decade_mean"
+        },
+        {
+          "op": "count",
+          "as": "n_years"
+        }
+      ],
+      "groupby": [
+        "decade"
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "lag",
+          "field": "decade_mean",
+          "as": "prev_mean"
+        }
+      ],
+      "sort": [
+        {
+          "field": "decade"
+        }
+      ]
+    },
+    {
+      "filter": "datum.prev_mean != null"
+    },
+    {
+      "calculate": "datum.decade_mean - datum.prev_mean",
+      "as": "change"
+    },
+    {
+      "calculate": "datum.decade + 's'",
+      "as": "decade_label"
+    }
+  ],
+  "layer": [
+    {
+      "description": "Zero baseline",
+      "mark": {
+        "type": "rule",
+        "color": "#9a968e"
+      },
+      "encoding": {
+        "y": {
+          "datum": 0,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "Stem from 0 to the value",
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "decade_label",
+          "type": "ordinal",
+          "title": null,
+          "sort": {
+            "field": "decade"
+          },
+          "axis": {
+            "labelAngle": 0,
+            "ticks": false,
+            "labelExpr": "indexof(['1890s','1920s','1950s','1980s','2010s'], datum.label) >= 0 ? datum.label : ''"
+          }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.change < 0",
+            "value": "#4393c3"
+          },
+          "value": "#b2182b"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.n_years < 10",
+            "value": 0.45
+          },
+          "value": 1
+        },
+        "tooltip": [
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "change",
+            "type": "quantitative",
+            "title": "Change from previous decade (°C)",
+            "format": "+.2f"
+          },
+          {
+            "field": "decade_mean",
+            "type": "quantitative",
+            "title": "Decade average (°C)",
+            "format": "+.2f"
+          },
+          {
+            "field": "n_years",
+            "type": "quantitative",
+            "title": "Years of data"
+          }
+        ],
+        "y": {
+          "field": "change",
+          "type": "quantitative"
+        },
+        "y2": {
+          "datum": 0
+        }
+      }
+    },
+    {
+      "description": "Head of the lollipop",
+      "mark": {
+        "type": "circle",
+        "size": 90,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "decade_label",
+          "type": "ordinal",
+          "sort": {
+            "field": "decade"
+          }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.change < 0",
+            "value": "#4393c3"
+          },
+          "value": "#b2182b"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.n_years < 10",
+            "value": 0.45
+          },
+          "value": 1
+        },
+        "tooltip": [
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "change",
+            "type": "quantitative",
+            "title": "Change from previous decade (°C)",
+            "format": "+.2f"
+          },
+          {
+            "field": "decade_mean",
+            "type": "quantitative",
+            "title": "Decade average (°C)",
+            "format": "+.2f"
+          },
+          {
+            "field": "n_years",
+            "type": "quantitative",
+            "title": "Years of data"
+          }
+        ],
+        "y": {
+          "field": "change",
+          "type": "quantitative",
+          "title": "Change from previous decade (°C)",
+          "axis": {
+            "format": "+.2f"
+          }
+        }
+      }
+    }
+  ]
+}

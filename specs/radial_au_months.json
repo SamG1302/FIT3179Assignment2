@@ -1,0 +1,285 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Radial heatmap: Australia's average anomaly for each month (slices, clockwise from January at the top) in each decade (rings, 1940s in the centre to 2020s at the edge). OWID / ERA5 monthly data, re-baselined per month to 1951–1980. Geometry is computed in transforms and drawn with scale: null so the angles and radii are exact.",
+  "title": {
+    "text": "Australia's year, decade by decade",
+    "subtitle": [
+      "Monthly anomaly vs 1951–1980, °C · rings: 1940s (centre) → 2020s (edge)",
+      "Our World in Data (ERA5)"
+    ]
+  },
+  "width": 400,
+  "height": 400,
+  "view": {
+    "stroke": null
+  },
+  "layer": [
+    {
+      "description": "One arc per decade x month",
+      "data": {
+        "url": "data/owid_monthly_focus.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "month": "number",
+            "anomaly": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.entity == 'Australia'"
+        },
+        {
+          "calculate": "datum.year >= 1951 && datum.year <= 1980 ? datum.anomaly : null",
+          "as": "base_value"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "mean",
+              "field": "base_value",
+              "as": "base_mean"
+            }
+          ],
+          "groupby": [
+            "month"
+          ]
+        },
+        {
+          "calculate": "datum.anomaly - datum.base_mean",
+          "as": "anom"
+        },
+        {
+          "calculate": "floor(datum.year / 10) * 10",
+          "as": "decade"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "mean",
+              "field": "anom",
+              "as": "anomaly"
+            }
+          ],
+          "groupby": [
+            "decade",
+            "month"
+          ]
+        },
+        {
+          "calculate": "datum.month - 1",
+          "as": "month_idx"
+        },
+        {
+          "calculate": "(datum.decade - 1940) / 10",
+          "as": "decade_idx"
+        },
+        {
+          "calculate": "PI / 6",
+          "as": "gap"
+        },
+        {
+          "calculate": "(2 * PI - datum.gap) / 12",
+          "as": "slice"
+        },
+        {
+          "calculate": "datum.gap / 2 + datum.month_idx * datum.slice",
+          "as": "theta0"
+        },
+        {
+          "calculate": "datum.theta0 + datum.slice",
+          "as": "theta1"
+        },
+        {
+          "calculate": "40 + datum.decade_idx * 17",
+          "as": "r0"
+        },
+        {
+          "calculate": "datum.r0 + 17",
+          "as": "r1"
+        },
+        {
+          "calculate": "['January','February','March','April','May','June','July','August','September','October','November','December'][datum.month_idx]",
+          "as": "month_name"
+        },
+        {
+          "calculate": "datum.decade == 2020 ? '2020–2025' : datum.decade + 's'",
+          "as": "decade_label"
+        }
+      ],
+      "mark": {
+        "type": "arc",
+        "stroke": "#fcfcfb",
+        "strokeWidth": 0.6
+      },
+      "encoding": {
+        "theta": {
+          "field": "theta0",
+          "type": "quantitative",
+          "scale": null
+        },
+        "theta2": {
+          "field": "theta1"
+        },
+        "radius": {
+          "field": "r0",
+          "type": "quantitative",
+          "scale": null
+        },
+        "radius2": {
+          "field": "r1"
+        },
+        "color": {
+          "field": "anomaly",
+          "type": "quantitative",
+          "title": "Anomaly (°C)",
+          "scale": {
+            "scheme": "redblue",
+            "reverse": true,
+            "domain": [
+              -1.5,
+              1.5
+            ],
+            "domainMid": 0,
+            "clamp": true
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 200,
+            "format": "+.1f"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "month_name",
+            "title": "Month"
+          },
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "anomaly",
+            "type": "quantitative",
+            "title": "Anomaly (°C)",
+            "format": "+.2f"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Month labels outside the outer ring",
+      "data": {
+        "sequence": {
+          "start": 0,
+          "stop": 12,
+          "as": "month_idx"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "PI / 6 / 2 + (datum.month_idx + 0.5) * (2 * PI - PI / 6) / 12",
+          "as": "theta_mid"
+        },
+        {
+          "calculate": "['J','F','M','A','M','J','J','A','S','O','N','D'][datum.month_idx]",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#5c6370"
+      },
+      "encoding": {
+        "theta": {
+          "field": "theta_mid",
+          "type": "quantitative",
+          "scale": null
+        },
+        "radius": {
+          "value": 200
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "description": "Decade labels in the gap at the top",
+      "data": {
+        "values": [
+          {
+            "d": "1940s",
+            "i": 0
+          },
+          {
+            "d": "1960s",
+            "i": 2
+          },
+          {
+            "d": "1980s",
+            "i": 4
+          },
+          {
+            "d": "2000s",
+            "i": 6
+          },
+          {
+            "d": "2020s",
+            "i": 8
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "40 + datum.i * 17 + 8.5",
+          "as": "r_mid"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 9,
+        "color": "#5c6370"
+      },
+      "encoding": {
+        "theta": {
+          "value": 0
+        },
+        "radius": {
+          "field": "r_mid",
+          "type": "quantitative",
+          "scale": null
+        },
+        "text": {
+          "field": "d"
+        }
+      }
+    },
+    {
+      "description": "Centre label",
+      "data": {
+        "values": [
+          {
+            "t": "Australia"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ]
+}

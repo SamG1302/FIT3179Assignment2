@@ -1,0 +1,182 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Bump chart: every five years from 1980, the 10 hottest years recorded up to then (NASA GISTEMP v4, from prep_data.R). Newer years are darker red. Click a line to highlight it; double-click to reset.",
+  "title": {
+    "text": "The 10 hottest years on record, as the record grew",
+    "subtitle": [
+      "Rank among all years up to that point, every 5 years · NASA GISTEMP v4",
+      "Darker red = more recent year"
+    ]
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "data/gistemp_hottest_ranks.csv"
+  },
+  "encoding": {
+    "x": {
+      "field": "as_of",
+      "type": "quantitative",
+      "title": "Year the ranking was made",
+      "scale": {
+        "domain": [
+          1980,
+          2025
+        ],
+        "nice": false
+      },
+      "axis": {
+        "format": "d",
+        "grid": false,
+        "values": [
+          1980,
+          1985,
+          1990,
+          1995,
+          2000,
+          2005,
+          2010,
+          2015,
+          2020,
+          2025
+        ],
+        "labelExpr": "datum.value % 10 == 0 || datum.value == 2025 ? datum.label : ''"
+      }
+    },
+    "y": {
+      "field": "rank",
+      "type": "quantitative",
+      "title": "Rank (1 = hottest)",
+      "scale": {
+        "domain": [
+          1,
+          10
+        ],
+        "reverse": true
+      },
+      "axis": {
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "grid": false
+      }
+    },
+    "detail": {
+      "field": "year",
+      "type": "nominal"
+    },
+    "color": {
+      "field": "year",
+      "type": "quantitative",
+      "title": "Year",
+      "scale": {
+        "domain": [
+          1940,
+          2025
+        ],
+        "range": [
+          "#e7e1d8",
+          "#b2182b"
+        ]
+      },
+      "legend": null
+    },
+    "opacity": {
+      "condition": {
+        "param": "pick",
+        "value": 1
+      },
+      "value": 0.15
+    },
+    "tooltip": [
+      {
+        "field": "year",
+        "type": "nominal",
+        "title": "Year"
+      },
+      {
+        "field": "rank",
+        "type": "quantitative",
+        "title": "Rank"
+      },
+      {
+        "field": "as_of",
+        "type": "quantitative",
+        "title": "As of",
+        "format": "d"
+      },
+      {
+        "field": "annual",
+        "type": "quantitative",
+        "title": "Anomaly (°C)",
+        "format": "+.2f"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5,
+        "interpolate": "linear"
+      },
+      "params": [
+        {
+          "name": "pick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "year"
+            ],
+            "on": "click",
+            "clear": "dblclick"
+          }
+        }
+      ]
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 45,
+        "opacity": 1
+      }
+    },
+    {
+      "description": "Direct labels: today's top 10 at the right edge",
+      "transform": [
+        {
+          "filter": "datum.as_of == 2025"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "fontSize": 10,
+        "fontWeight": 600,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "text": {
+          "field": "year",
+          "type": "nominal"
+        },
+        "color": null
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.as_of % 5 == 0"
+    }
+  ]
+}

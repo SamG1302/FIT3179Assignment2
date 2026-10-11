@@ -1,0 +1,80 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Dumbbell chart: warming rate per decade in 1950–1979 (grey) vs 1980–2025 (red) for 19 countries (OWID / ERA5, owid_country_summary.csv). Sorted by how much the rate rose. Australia and Malaysia are shaded.",
+  "title": {
+    "text": "Warming rate before and after 1980",
+    "subtitle": ["°C per decade · Our World in Data (ERA5)", "Sorted by how much warming sped up"]
+  },
+  "width": "container",
+  "height": { "step": 19 },
+  "data": { "url": "data/owid_country_summary.csv" },
+  "transform": [
+    { "filter": { "field": "map_id", "oneOf": ["AUS", "MYS", "NZL", "IDN", "PNG", "CHN", "IND", "JPN", "RUS", "NOR", "DEU", "GBR", "EGY", "SAU", "ZAF", "USA", "CAN", "BRA", "ARG"] } },
+    { "calculate": "datum.map_id == 'AUS' || datum.map_id == 'MYS'", "as": "is_focus" }
+  ],
+  "encoding": {
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "title": null,
+      "sort": { "field": "acceleration", "order": "descending" },
+      "axis": {
+        "ticks": false,
+        "domain": false,
+        "labelFontWeight": { "expr": "datum.value == 'Australia' || datum.value == 'Malaysia' ? 700 : 400" },
+        "labelColor": { "expr": "datum.value == 'Australia' || datum.value == 'Malaysia' ? '#1f2328' : '#5c6370'" }
+      }
+    }
+  },
+  "layer": [
+    {
+      "description": "Accent band behind Australia and Malaysia",
+      "transform": [{ "filter": "datum.is_focus" }],
+      "mark": { "type": "rect", "color": "#f6e7d3" },
+      "encoding": { "x": { "datum": -0.35, "type": "quantitative" }, "x2": { "datum": 0.65 } }
+    },
+    {
+      "description": "Zero line",
+      "mark": { "type": "rule", "color": "#9a968e", "strokeDash": [4, 3] },
+      "encoding": { "x": { "datum": 0, "type": "quantitative" }, "y": null }
+    },
+    {
+      "description": "Bar of the dumbbell: from the old rate to the new rate",
+      "mark": { "type": "rule", "color": "#7d7a73", "strokeWidth": 2 },
+      "encoding": {
+        "x": {
+          "field": "rate_early",
+          "type": "quantitative",
+          "title": "Warming rate (°C per decade)",
+          "scale": { "domain": [-0.35, 0.65], "nice": false },
+          "axis": { "format": "+.1f", "values": [-0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] }
+        },
+        "x2": { "field": "rate_recent" }
+      }
+    },
+    {
+      "description": "Two dots per country, one per period",
+      "transform": [
+        { "fold": ["rate_early", "rate_recent"], "as": ["period_key", "rate"] },
+        { "calculate": "datum.period_key == 'rate_early' ? '1950–1979' : '1980–2025'", "as": "period" }
+      ],
+      "mark": { "type": "circle", "size": 90, "opacity": 1, "stroke": "#fcfcfb", "strokeWidth": 1 },
+      "encoding": {
+        "x": { "field": "rate", "type": "quantitative" },
+        "color": {
+          "field": "period",
+          "type": "nominal",
+          "title": null,
+          "scale": { "domain": ["1950–1979", "1980–2025"], "range": ["#7d7a73", "#b2182b"] },
+          "legend": { "orient": "top", "direction": "horizontal" }
+        },
+        "tooltip": [
+          { "field": "country", "title": "Country" },
+          { "field": "rate_early", "type": "quantitative", "title": "1950–1979 (°C/decade)", "format": "+.2f" },
+          { "field": "rate_recent", "type": "quantitative", "title": "1980–2025 (°C/decade)", "format": "+.2f" },
+          { "field": "acceleration", "type": "quantitative", "title": "Change in rate", "format": "+.2f" }
+        ]
+      }
+    }
+  ]
+}

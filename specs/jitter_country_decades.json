@@ -1,0 +1,352 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Jitter plot: every country's decade-average anomaly (OWID / ERA5, re-baselined to each country's 1951–1980 mean), one dot per country per decade. Dots are spread sideways by a fixed pseudo-random offset (stable between page loads). Black dashes = median country. The dropdown highlights one country's path; Australia by default.",
+  "title": {
+    "text": "Every country, decade by decade",
+    "subtitle": [
+      "Decade-average anomaly vs each country's 1951–1980 mean, °C",
+      "Our World in Data (ERA5) · dash = median country · 2020s = 2020–2025"
+    ]
+  },
+  "width": "container",
+  "height": 360,
+  "params": [
+    {
+      "name": "focus",
+      "value": "AUS",
+      "bind": {
+        "input": "select",
+        "name": "Highlight ",
+        "options": [
+          "AUS",
+          "MYS",
+          "NZL",
+          "IDN",
+          "PNG",
+          "CHN",
+          "IND",
+          "JPN",
+          "RUS",
+          "NOR",
+          "DEU",
+          "GBR",
+          "EGY",
+          "SAU",
+          "ZAF",
+          "USA",
+          "CAN",
+          "BRA",
+          "ARG"
+        ],
+        "labels": [
+          "Australia",
+          "Malaysia",
+          "New Zealand",
+          "Indonesia",
+          "Papua New Guinea",
+          "China",
+          "India",
+          "Japan",
+          "Russia",
+          "Norway",
+          "Germany",
+          "United Kingdom",
+          "Egypt",
+          "Saudi Arabia",
+          "South Africa",
+          "United States",
+          "Canada",
+          "Brazil",
+          "Argentina"
+        ]
+      }
+    }
+  ],
+  "data": {
+    "url": "data/owid_annual_countries.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "year": "number",
+        "anomaly": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.year >= 1951 && datum.year <= 1980 ? datum.anomaly : null",
+      "as": "base_value"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "mean",
+          "field": "base_value",
+          "as": "base_mean"
+        }
+      ],
+      "groupby": [
+        "map_id"
+      ]
+    },
+    {
+      "calculate": "datum.anomaly - datum.base_mean",
+      "as": "anom"
+    },
+    {
+      "calculate": "floor(datum.year / 10) * 10",
+      "as": "decade"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "mean",
+          "field": "anom",
+          "as": "anomaly"
+        }
+      ],
+      "groupby": [
+        "map_id",
+        "decade"
+      ]
+    },
+    {
+      "lookup": "map_id",
+      "from": {
+        "data": {
+          "url": "data/owid_country_summary.csv"
+        },
+        "key": "map_id",
+        "fields": [
+          "country"
+        ]
+      }
+    },
+    {
+      "window": [
+        {
+          "op": "row_number",
+          "as": "row"
+        }
+      ],
+      "groupby": [
+        "decade"
+      ],
+      "sort": [
+        {
+          "field": "map_id"
+        }
+      ]
+    },
+    {
+      "calculate": "((datum.row * 7919) % 97) / 97",
+      "as": "jitter"
+    },
+    {
+      "calculate": "datum.decade + 1 + datum.jitter * 8",
+      "as": "x_pos"
+    },
+    {
+      "calculate": "datum.decade == 2020 ? '2020–2025' : datum.decade + 's'",
+      "as": "decade_label"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "x_pos",
+      "type": "quantitative",
+      "title": null,
+      "scale": {
+        "domain": [
+          1940,
+          2030
+        ],
+        "nice": false
+      },
+      "axis": {
+        "values": [
+          1945,
+          1955,
+          1965,
+          1975,
+          1985,
+          1995,
+          2005,
+          2015,
+          2025
+        ],
+        "labelExpr": "(datum.value - 5) + 's'",
+        "grid": false,
+        "ticks": false
+      }
+    },
+    "y": {
+      "field": "anomaly",
+      "type": "quantitative",
+      "title": "Anomaly (°C)",
+      "axis": {
+        "format": "+.1f"
+      }
+    }
+  },
+  "layer": [
+    {
+      "description": "Zero line = 1951–1980 average",
+      "mark": {
+        "type": "rule",
+        "color": "#9a968e",
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "x": null,
+        "y": {
+          "datum": 0,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "All countries: small muted dots",
+      "mark": {
+        "type": "circle",
+        "size": 22,
+        "color": "#9a968e",
+        "opacity": 0.45
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "country",
+            "title": "Country"
+          },
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "anomaly",
+            "type": "quantitative",
+            "title": "Anomaly (°C)",
+            "format": "+.2f"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Median country per decade",
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "median",
+              "field": "anomaly",
+              "as": "median"
+            }
+          ],
+          "groupby": [
+            "decade"
+          ]
+        },
+        {
+          "calculate": "datum.decade + 1",
+          "as": "x0"
+        },
+        {
+          "calculate": "datum.decade + 9",
+          "as": "x1"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#1f2328",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "x0",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x1"
+        },
+        "y": {
+          "field": "median",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "Highlighted country: its path across decades",
+      "transform": [
+        {
+          "filter": "datum.map_id == focus"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#b2182b",
+        "strokeWidth": 1.5,
+        "opacity": 0.8
+      }
+    },
+    {
+      "description": "Highlighted country: dots",
+      "transform": [
+        {
+          "filter": "datum.map_id == focus"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 90,
+        "color": "#b2182b",
+        "opacity": 1,
+        "stroke": "#fcfcfb",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "country",
+            "title": "Country"
+          },
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "anomaly",
+            "type": "quantitative",
+            "title": "Anomaly (°C)",
+            "format": "+.2f"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Label the highlighted country at its latest dot",
+      "transform": [
+        {
+          "filter": "datum.map_id == focus && datum.decade == 2020"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -8,
+        "dy": -10,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#b2182b"
+      },
+      "encoding": {
+        "text": {
+          "field": "country"
+        }
+      }
+    }
+  ]
+}
