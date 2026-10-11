@@ -1,38 +1,32 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Global annual mean temperature anomaly with a 10-year rolling average.",
+  "description": "Global annual mean land + ocean temperature anomaly (NASA GISTEMP v4), with the trailing 10-year mean from prep_data.R.",
   "title": {
-    "text": "Global temperature anomaly, 1880 to today",
-    "subtitle": "Difference from the long-term average, °C"
+    "text": "Global temperature anomaly, 1880–2025",
+    "subtitle": ["Difference from the 1951–1980 average, °C", "NASA GISTEMP v4"]
   },
   "width": "container",
   "height": 320,
   "data": {
-    "url": "data/global_annual_anomaly.csv"
+    "url": "data/gistemp_global.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "year": "number",
+        "annual": "number",
+        "mean_10yr": "number",
+        "vs_1880_1900": "number"
+      }
+    }
   },
   "transform": [
     {
-      "window": [
-        {
-          "op": "mean",
-          "field": "temp",
-          "as": "rolling_mean"
-        }
-      ],
-      "sort": [
-        {
-          "field": "year"
-        }
-      ],
-      "frame": [
-        -5,
-        4
-      ]
+      "filter": "isValid(datum.annual)"
     }
   ],
   "layer": [
     {
-      "description": "Zero line = the baseline average",
+      "description": "Zero line = the 1951–1980 average",
       "mark": {
         "type": "rule",
         "color": "#9a968e",
@@ -71,7 +65,7 @@
           }
         },
         "y": {
-          "field": "temp",
+          "field": "annual",
           "type": "quantitative",
           "title": "Anomaly (°C)",
           "axis": {
@@ -81,7 +75,7 @@
       }
     },
     {
-      "description": "10-year rolling mean: the main story line",
+      "description": "Trailing 10-year mean (mean_10yr): the main story line",
       "mark": {
         "type": "line",
         "color": "#b2182b",
@@ -93,14 +87,22 @@
           "type": "quantitative"
         },
         "y": {
-          "field": "rolling_mean",
+          "field": "mean_10yr",
           "type": "quantitative"
         }
-      }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.mean_10yr)"
+        }
+      ]
     },
     {
       "description": "Direct label on the trend line instead of a legend",
       "transform": [
+        {
+          "filter": "isValid(datum.mean_10yr)"
+        },
         {
           "joinaggregate": [
             {
@@ -111,14 +113,14 @@
           ]
         },
         {
-          "filter": "datum.year === datum.last_year - 5"
+          "filter": "datum.year === datum.last_year"
         }
       ],
       "mark": {
         "type": "text",
         "align": "right",
-        "dx": -6,
-        "dy": -14,
+        "dx": -4,
+        "dy": 16,
         "fontSize": 11,
         "fontWeight": 600,
         "color": "#b2182b"
@@ -129,7 +131,7 @@
           "type": "quantitative"
         },
         "y": {
-          "field": "rolling_mean",
+          "field": "mean_10yr",
           "type": "quantitative"
         },
         "text": {
@@ -165,7 +167,7 @@
           "type": "quantitative"
         },
         "y": {
-          "field": "temp",
+          "field": "annual",
           "type": "quantitative"
         },
         "opacity": {
@@ -184,15 +186,21 @@
             "format": "d"
           },
           {
-            "field": "temp",
+            "field": "annual",
             "type": "quantitative",
             "title": "Anomaly (°C)",
             "format": "+.2f"
           },
           {
-            "field": "rolling_mean",
+            "field": "mean_10yr",
             "type": "quantitative",
             "title": "10-yr average (°C)",
+            "format": "+.2f"
+          },
+          {
+            "field": "vs_1880_1900",
+            "type": "quantitative",
+            "title": "vs 1880–1900 (°C)",
             "format": "+.2f"
           }
         ]

@@ -13,8 +13,8 @@
 const VISUALISATIONS = [
   { id: "#vis-global-trend",   spec: "specs/line_global_trend.json" },
   { id: "#vis-decade-rate",    spec: "specs/bar_decade_rate.json" },
-  { id: "#vis-map-choropleth", spec: "specs/map_choropleth_decade.json" },
-  { id: "#vis-map-cities",     spec: "specs/map_symbols_cities.json" },
+  { id: "#vis-map-choropleth", spec: "specs/map_choropleth_year.json" },
+  { id: "#vis-map-symbols",     spec: "specs/map_symbols_countries.json" },
   { id: "#vis-map-grid",       spec: "specs/map_bin_grid.json" }
 ];
 

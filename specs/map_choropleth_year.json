@@ -1,0 +1,84 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "MAP IDIOM 1 (choropleth): annual temperature anomaly by country (OWID / Copernicus ERA5), re-baselined in the browser to each country's 1951–1980 average so it matches NASA and Berkeley. Year slider 1940–2025.",
+  "title": {
+    "text": "Temperature anomaly by country",
+    "subtitle": ["Annual mean vs each country's 1951–1980 average, °C", "Our World in Data (Copernicus ERA5)"]
+  },
+  "width": "container",
+  "height": 420,
+  "projection": { "type": "equalEarth" },
+  "params": [
+    {
+      "name": "year",
+      "value": 2025,
+      "bind": { "input": "range", "min": 1940, "max": 2025, "step": 1, "name": "Year " }
+    }
+  ],
+  "layer": [
+    {
+      "description": "Ocean / globe outline",
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#eef3f6", "stroke": null }
+    },
+    {
+      "description": "All countries in grey, so shapes without data (e.g. Antarctica, Taiwan) still appear",
+      "data": {
+        "url": "data/ne_110m_countries.topojson",
+        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+      },
+      "mark": { "type": "geoshape", "fill": "#dedbd5", "stroke": "#fcfcfb", "strokeWidth": 0.5 }
+    },
+    {
+      "description": "OWID anomalies joined to Natural Earth shapes on map_id = ADM0_A3",
+      "data": { "url": "data/owid_annual_countries.csv" },
+      "transform": [
+        {
+          "calculate": "datum.year >= 1951 && datum.year <= 1980 ? datum.anomaly : null",
+          "as": "base_value"
+        },
+        {
+          "joinaggregate": [{ "op": "mean", "field": "base_value", "as": "base_mean" }],
+          "groupby": ["map_id"]
+        },
+        { "calculate": "datum.anomaly - datum.base_mean", "as": "anomaly_5180" },
+        { "filter": "datum.year == year" },
+        {
+          "lookup": "map_id",
+          "from": {
+            "data": {
+              "url": "data/ne_110m_countries.topojson",
+              "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+            },
+            "key": "properties.ADM0_A3"
+          },
+          "as": "geo"
+        },
+        { "filter": "datum.geo != null" },
+        { "calculate": "datum.geo.properties.NAME", "as": "country" }
+      ],
+      "params": [
+        { "name": "hover", "select": { "type": "point", "fields": ["map_id"], "on": "pointerover", "clear": "pointerout" } }
+      ],
+      "mark": { "type": "geoshape" },
+      "encoding": {
+        "shape": { "field": "geo", "type": "geojson" },
+        "color": {
+          "field": "anomaly_5180",
+          "type": "quantitative",
+          "title": "Anomaly (°C)",
+          "scale": { "scheme": "redblue", "reverse": true, "domain": [-2, 4], "domainMid": 0, "clamp": true },
+          "legend": { "orient": "bottom-left", "direction": "horizontal", "gradientLength": 180, "format": "+.0f" }
+        },
+        "strokeWidth": { "condition": { "param": "hover", "empty": false, "value": 1.5 }, "value": 0.5 },
+        "stroke": { "condition": { "param": "hover", "empty": false, "value": "#1f2328" }, "value": "#fcfcfb" },
+        "tooltip": [
+          { "field": "country", "title": "Country" },
+          { "field": "year", "title": "Year" },
+          { "field": "anomaly_5180", "type": "quantitative", "title": "vs 1951–1980 (°C)", "format": "+.2f" },
+          { "field": "anomaly", "type": "quantitative", "title": "vs 1991–2020 (°C, as supplied)", "format": "+.2f" }
+        ]
+      }
+    }
+  ]
+}

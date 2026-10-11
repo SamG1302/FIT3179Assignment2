@@ -1,59 +1,126 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "MAP IDIOM 3 (bin map): decade-average temperature anomaly in 5° x 5° grid cells (Berkeley Earth), with a decade slider.",
+  "description": "MAP IDIOM 3 (bin map): decade-average temperature anomaly in 5° x 5° grid cells (Berkeley Earth). Cell squares come from be_grid_cells.geojson; values per decade from be_grid_decades.csv, joined on id.",
   "title": {
     "text": "Where the world has warmed, cell by cell",
-    "subtitle": "Decade-average anomaly vs 1951–1980, °C · 5° grid · Berkeley Earth"
+    "subtitle": ["Decade-average anomaly vs 1951–1980, °C · 5° grid", "Berkeley Earth · grey = too little data that decade"]
   },
   "width": "container",
   "height": 460,
-  "projection": { "type": "equirectangular" },
+  "projection": {
+    "type": "equirectangular"
+  },
   "params": [
     {
       "name": "decade",
       "value": 2020,
-      "bind": { "input": "range", "min": 1900, "max": 2020, "step": 10, "name": "Decade " }
+      "bind": {
+        "input": "range",
+        "min": 1900,
+        "max": 2020,
+        "step": 10,
+        "name": "Decade "
+      }
     }
   ],
   "layer": [
     {
-      "description": "Land underneath. It also makes the projection fit the whole globe",
+      "description": "Light grey globe = no data for that cell and decade",
       "data": {
-        "url": "data/land-110m.json",
-        "format": { "type": "topojson", "feature": "land" }
+        "sphere": true
       },
-      "mark": { "type": "geoshape", "fill": "#dedbd5", "stroke": null }
+      "mark": {
+        "type": "geoshape",
+        "fill": "#e8e6e1",
+        "stroke": null
+      }
     },
     {
-      "description": "One square per 5° cell. Square width = 5 degrees in pixels (globe extent ~360 x 177.5 degrees).",
-      "data": { "url": "data/be_grid_5deg.csv" },
+      "description": "One 5° square per grid cell, coloured by its decade-average anomaly",
+      "data": {
+        "url": "data/be_grid_decades.csv"
+      },
       "transform": [
-        { "calculate": "datum['d' + decade]", "as": "anomaly_c" },
-        { "filter": "isValid(datum.anomaly_c) && datum.anomaly_c !== ''" },
-        { "calculate": "decade == 2020 ? '2020–2025' : decade + 's'", "as": "decade_label" },
-        { "calculate": "datum.land >= 0.5 ? 'Mostly land' : 'Mostly ocean'", "as": "surface" }
+        {
+          "filter": "datum.decade == decade"
+        },
+        {
+          "lookup": "id",
+          "from": {
+            "data": {
+              "url": "data/be_grid_cells.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.id"
+          },
+          "as": "geo"
+        },
+        {
+          "filter": "datum.geo != null"
+        },
+        {
+          "calculate": "decade == 2020 ? '2020–2025' : decade + 's'",
+          "as": "decade_label"
+        },
+        {
+          "calculate": "datum.geo.properties.land >= 0.5 ? 'Mostly land' : 'Mostly ocean'",
+          "as": "surface"
+        }
       ],
       "mark": {
-        "type": "square",
-        "opacity": 1,
-        "size": { "expr": "pow(max(1, 5 * min(width / 360, height / 177.5) - 0.6), 2)" }
+        "type": "geoshape",
+        "stroke": "#fcfcfb",
+        "strokeWidth": 0.3
       },
       "encoding": {
-        "longitude": { "field": "lon", "type": "quantitative" },
-        "latitude": { "field": "lat", "type": "quantitative" },
+        "shape": {
+          "field": "geo",
+          "type": "geojson"
+        },
         "color": {
-          "field": "anomaly_c",
+          "field": "anomaly",
           "type": "quantitative",
           "title": "Anomaly (°C)",
-          "scale": { "scheme": "redblue", "reverse": true, "domain": [-2, 5], "domainMid": 0, "clamp": true },
-          "legend": { "orient": "right", "format": "+.0f", "gradientLength": 220 }
+          "scale": {
+            "scheme": "redblue",
+            "reverse": true,
+            "domain": [
+              -2,
+              4
+            ],
+            "domainMid": 0,
+            "clamp": true
+          },
+          "legend": {
+            "orient": "right",
+            "format": "+.0f",
+            "gradientLength": 220
+          }
         },
         "tooltip": [
-          { "field": "decade_label", "title": "Decade" },
-          { "field": "lat", "title": "Latitude (cell centre)" },
-          { "field": "lon", "title": "Longitude (cell centre)" },
-          { "field": "surface", "title": "Surface" },
-          { "field": "anomaly_c", "type": "quantitative", "title": "Anomaly (°C)", "format": "+.2f" }
+          {
+            "field": "decade_label",
+            "title": "Decade"
+          },
+          {
+            "field": "surface",
+            "title": "Surface"
+          },
+          {
+            "field": "anomaly",
+            "type": "quantitative",
+            "title": "Anomaly (°C)",
+            "format": "+.2f"
+          },
+          {
+            "field": "geo.properties.rate_recent",
+            "type": "quantitative",
+            "title": "Rate 1980–2025 (°C/decade)",
+            "format": "+.2f"
+          }
         ]
       }
     },
@@ -61,9 +128,18 @@
       "description": "Coastlines on top for orientation",
       "data": {
         "url": "data/land-110m.json",
-        "format": { "type": "topojson", "feature": "land" }
+        "format": {
+          "type": "topojson",
+          "feature": "land"
+        }
       },
-      "mark": { "type": "geoshape", "fill": null, "stroke": "#1f2328", "strokeWidth": 0.6, "strokeOpacity": 0.6 }
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#1f2328",
+        "strokeWidth": 0.6,
+        "strokeOpacity": 0.6
+      }
     }
   ]
 }

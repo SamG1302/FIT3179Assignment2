@@ -1,18 +1,22 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Change in mean global anomaly from one decade to the next. Taller bars mean faster warming.",
+  "description": "Change in mean global anomaly (NASA GISTEMP v4) from one decade to the next. Taller bars mean faster warming.",
   "title": {
     "text": "How much warmer each decade was than the one before",
-    "subtitle": "Change in decade-average anomaly, °C (latest decade is incomplete)"
+    "subtitle": ["Change in decade-average anomaly, °C", "NASA GISTEMP v4 · 2020s = 2020–2025 only"]
   },
   "width": "container",
   "height": 280,
-  "data": { "url": "data/global_annual_anomaly.csv" },
+  "data": {
+    "url": "data/gistemp_global.csv",
+    "format": { "type": "csv", "parse": { "year": "number", "annual": "number" } }
+  },
   "transform": [
+    { "filter": "isValid(datum.annual)" },
     { "calculate": "floor(datum.year / 10) * 10", "as": "decade" },
     {
       "aggregate": [
-        { "op": "mean", "field": "temp", "as": "decade_mean" },
+        { "op": "mean", "field": "annual", "as": "decade_mean" },
         { "op": "count", "as": "n_years" }
       ],
       "groupby": ["decade"]

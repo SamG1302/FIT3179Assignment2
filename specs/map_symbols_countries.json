@@ -1,0 +1,70 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "MAP IDIOM 2 (proportional symbol): one circle per country at its inner point. Circle area = warming rate since 1980; colour = whether warming is faster or slower than in 1950–1979 (OWID / ERA5, from owid_country_summary.csv). Click the legend to filter.",
+  "title": {
+    "text": "How fast each country is warming",
+    "subtitle": ["Circle area = warming rate 1980–2025, °C per decade", "Colour = faster or slower than 1950–1979 · Our World in Data (ERA5)"]
+  },
+  "width": "container",
+  "height": 360,
+  "projection": { "type": "equalEarth" },
+  "layer": [
+    {
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#eef3f6", "stroke": null }
+    },
+    {
+      "data": {
+        "url": "data/ne_110m_countries.topojson",
+        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+      },
+      "mark": { "type": "geoshape", "fill": "#dedbd5", "stroke": "#fcfcfb", "strokeWidth": 0.5 }
+    },
+    {
+      "description": "Country summary joined to point locations (made with mapshaper -points inner)",
+      "data": { "url": "data/owid_country_summary.csv" },
+      "transform": [
+        {
+          "lookup": "map_id",
+          "from": { "data": { "url": "data/country_points.csv" }, "key": "map_id", "fields": ["lon", "lat"] }
+        },
+        { "filter": "isValid(datum.lon) && isValid(datum.rate_recent)" },
+        {
+          "calculate": "datum.acceleration > 0 ? 'Faster than 1950–79' : 'Slower than 1950–79'",
+          "as": "trend"
+        }
+      ],
+      "params": [
+        { "name": "trend_pick", "select": { "type": "point", "fields": ["trend"] }, "bind": "legend" }
+      ],
+      "mark": { "type": "circle", "stroke": "#fcfcfb", "strokeWidth": 1 },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude": { "field": "lat", "type": "quantitative" },
+        "size": {
+          "field": "rate_recent",
+          "type": "quantitative",
+          "title": "°C per decade (1980–2025)",
+          "scale": { "type": "sqrt", "domain": [0, 0.7], "range": [0, 500] },
+          "legend": { "orient": "bottom-left", "values": [0.1, 0.3, 0.6], "format": ".1f", "symbolFillColor": "#9a968e", "symbolStrokeColor": "#fcfcfb" }
+        },
+        "color": {
+          "field": "trend",
+          "type": "nominal",
+          "title": "Warming now is…",
+          "scale": { "domain": ["Faster than 1950–79", "Slower than 1950–79"], "range": ["#b2182b", "#4393c3"] },
+          "legend": { "orient": "bottom-right" }
+        },
+        "opacity": { "condition": { "param": "trend_pick", "value": 0.85 }, "value": 0.08 },
+        "order": { "field": "rate_recent", "sort": "descending" },
+        "tooltip": [
+          { "field": "country", "title": "Country" },
+          { "field": "rate_early", "type": "quantitative", "title": "Rate 1950–1979 (°C/decade)", "format": "+.2f" },
+          { "field": "rate_recent", "type": "quantitative", "title": "Rate 1980–2025 (°C/decade)", "format": "+.2f" },
+          { "field": "acceleration", "type": "quantitative", "title": "Change in rate", "format": "+.2f" },
+          { "field": "change", "type": "quantitative", "title": "Warmer than 1951–1980 by (°C)", "format": "+.2f" }
+        ]
+      }
+    }
+  ]
+}

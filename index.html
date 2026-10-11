@@ -37,11 +37,6 @@
           TODO: One or two sentences that hook an average Australian reader. For example, what
           today's temperatures mean compared with when their grandparents were young.
         </p>
-        <!-- Remove this banner once every chart uses your real cleaned data -->
-        <p class="draft-banner">
-          <strong>Draft:</strong> maps 1 and 2 still show <em>synthetic sample data</em>
-          (files named <code>data/sample_*.csv</code>). Replace them with your cleaned data.
-        </p>
       </div>
     </header>
 
@@ -50,13 +45,14 @@
       <div class="pure-u-1">
         <h2>1. The long view</h2>
         <p>
-          TODO: Explain the global annual anomaly line. Spell out the baseline (e.g. "compared with
-          the 1951–1980 average") and point readers to the key turning point.
+          TODO (rewrite in your own words): Each year is compared with the 1951–1980 average.
+          Temperatures barely changed until about 1980, then rose steadily. 2024 was the warmest
+          year on record (+1.28 °C), and 2016–2025 averaged about 1.3 °C warmer than 1901–1930.
         </p>
       </div>
       <div class="pure-u-1">
         <div id="vis-global-trend" class="vis-container"></div>
-        <p class="vis-caption">Hover over the chart to read individual years. The thick line is a 10-year rolling average.</p>
+        <p class="vis-caption">Hover over the chart to read individual years. The thick line is the average of the previous 10 years.</p>
       </div>
     </section>
 
@@ -66,8 +62,9 @@
         <div class="description description-left">
           <h2>2. Is warming speeding up?</h2>
           <p>
-            TODO: Each bar is how much warmer a decade was than the decade before. Taller bars
-            in recent decades mean the warming is accelerating.
+            TODO (rewrite): Each bar is how much warmer a decade was than the one before.
+            Global warming ran at about +0.01 °C per decade in 1880–1939, +0.21 °C in 1980–2025
+            and +0.27 °C in 2000–2025, so it has accelerated.
           </p>
         </div>
       </div>
@@ -81,8 +78,9 @@
       <div class="pure-u-1">
         <h2>3. Where is it warming? <span class="idiom-tag">Choropleth map</span></h2>
         <p>
-          TODO: Describe the pattern across countries. Mention where Australia sits.
-          Drag the slider to step through the decades.
+          TODO (rewrite): Every one of the 194 countries is warmer in 1996–2025 than in 1951–1980
+          (median +1.08 °C). Australia has warmed less than most (+0.43 °C), Malaysia about
+          average (+1.07 °C). Drag the slider from 1940 to 2025.
         </p>
       </div>
       <div class="pure-u-1">
@@ -93,14 +91,15 @@
     <!-- ============ SECTION 4: MAP 2 — PROPORTIONAL SYMBOLS =============== -->
     <section class="pure-g story-row">
       <div class="pure-u-1 pure-u-md-2-3">
-        <div id="vis-map-cities" class="vis-container"></div>
+        <div id="vis-map-symbols" class="vis-container"></div>
       </div>
       <div class="pure-u-1 pure-u-md-1-3">
         <div class="description description-right">
-          <h2>4. Cities feeling the heat <span class="idiom-tag">Proportional symbol map</span></h2>
+          <h2>4. Is it speeding up everywhere? <span class="idiom-tag">Proportional symbol map</span></h2>
           <p>
-            TODO: Circle size shows how much each city has warmed. Compare Melbourne, Sydney
-            and Darwin with cities overseas.
+            TODO (rewrite): Bigger circles mean faster warming since 1980. Red countries are warming
+            faster now than in 1950–1979 (168 of 194). Australia went from slight cooling
+            (−0.20 °C per decade) to warming (+0.13 °C per decade). Click a legend entry to filter.
           </p>
         </div>
       </div>
@@ -111,9 +110,10 @@
       <div class="pure-u-1">
         <h2>5. Poles versus tropics <span class="idiom-tag">Bin map (5° grid)</span></h2>
         <p>
-          TODO: Gridded data removes country borders, so you can see the pattern itself. Drag the
-          slider from the 1900s to the 2020s and point out that the far north warms fastest
-          (Arctic amplification).
+          TODO (rewrite): Grid cells ignore country borders and include the oceans. Since 1980 the
+          Arctic (60–90°N) has warmed at about 0.56 °C per decade, almost three times the global
+          rate (0.21 °C). Drag the slider from the 1900s to the 2020s. Grey cells had too little
+          data in that decade.
         </p>
       </div>
       <div class="pure-u-1">
@@ -146,10 +146,14 @@
       <div class="pure-u-1 small-font">
         <p>
           <strong>Data sources:</strong>
-          TODO: List each dataset with a link (e.g. NASA GISTEMP, Our World in Data).
+          Global temperatures: <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISS Surface Temperature Analysis (GISTEMP v4)</a>.
+          Country temperatures: <a href="https://ourworldindata.org/grapher/annual-temperature-anomalies" target="_blank" rel="noopener">Our World in Data</a>,
+          based on Copernicus Climate Change Service ERA5 (re-baselined here to 1951–1980).
           Gridded temperatures: <a href="https://berkeleyearth.org/data/" target="_blank" rel="noopener">Berkeley Earth</a>
           high-resolution 5° global TAVG (CC BY-NC 4.0).
-          Map boundaries: <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">world-atlas</a> (Natural Earth, 1:110m).
+          Country boundaries: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> 1:110m, converted to TopoJSON with
+          <a href="https://mapshaper.org/" target="_blank" rel="noopener">mapshaper</a>; coastlines from
+          <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">world-atlas</a>.
         </p>
         <p>
           Created by TODO: Your Name for FIT3179, Monash University, 2026.
