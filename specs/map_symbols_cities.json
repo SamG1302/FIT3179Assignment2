@@ -1,0 +1,55 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "MAP IDIOM 2 (proportional symbol): circle area = how much each city has warmed.",
+  "title": {
+    "text": "How much major cities have warmed",
+    "subtitle": "Circle area = warming since the 1950s, °C · SAMPLE DATA"
+  },
+  "width": "container",
+  "height": 360,
+  "projection": { "type": "equalEarth" },
+  "params": [
+    {
+      "name": "region",
+      "value": "All",
+      "bind": { "input": "select", "options": ["All", "Australia", "Malaysia"], "name": "Highlight " }
+    }
+  ],
+  "layer": [
+    {
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#eef3f6", "stroke": null }
+    },
+    {
+      "data": {
+        "url": "data/land-110m.json",
+        "format": { "type": "topojson", "feature": "land" }
+      },
+      "mark": { "type": "geoshape", "fill": "#dedbd5", "stroke": null }
+    },
+    {
+      "data": { "url": "data/sample_cities.csv" },
+      "transform": [{ "calculate": "region == 'All' || datum.country == region", "as": "highlighted" }],
+      "mark": { "type": "circle", "stroke": "#fcfcfb", "strokeWidth": 1.5 },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude": { "field": "lat", "type": "quantitative" },
+        "size": {
+          "field": "warming_c",
+          "type": "quantitative",
+          "title": "Warming (°C)",
+          "scale": { "type": "sqrt", "domain": [0, 3], "range": [0, 900] },
+          "legend": { "orient": "bottom-left", "values": [0.5, 1.5, 2.5], "format": ".1f", "symbolFillColor": "#b2182b", "symbolStrokeColor": "#fcfcfb" }
+        },
+        "color": { "value": "#b2182b" },
+        "opacity": { "condition": { "test": "datum.highlighted", "value": 0.85 }, "value": 0.15 },
+        "order": { "field": "warming_c", "sort": "descending" },
+        "tooltip": [
+          { "field": "city", "title": "City" },
+          { "field": "country", "title": "Country" },
+          { "field": "warming_c", "type": "quantitative", "title": "Warming (°C)", "format": "+.2f" }
+        ]
+      }
+    }
+  ]
+}

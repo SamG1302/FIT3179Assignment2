@@ -1,0 +1,79 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "MAP IDIOM 1 (choropleth): temperature anomaly by country, one decade at a time via a slider.",
+  "title": {
+    "text": "Temperature anomaly by country",
+    "subtitle": "Decade average vs baseline, °C · SAMPLE DATA, replace with your own"
+  },
+  "width": "container",
+  "height": 420,
+  "projection": { "type": "equalEarth" },
+  "params": [
+    {
+      "name": "decade",
+      "value": 2020,
+      "bind": { "input": "range", "min": 1950, "max": 2020, "step": 10, "name": "Decade " }
+    }
+  ],
+  "layer": [
+    {
+      "description": "Ocean / globe outline",
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#eef3f6", "stroke": null }
+    },
+    {
+      "description": "All countries in grey, so ones without data still appear",
+      "data": {
+        "url": "data/countries-110m.json",
+        "format": { "type": "topojson", "feature": "countries" }
+      },
+      "mark": { "type": "geoshape", "fill": "#dedbd5", "stroke": "#fcfcfb", "strokeWidth": 0.5 }
+    },
+    {
+      "description": "Your data, joined to country shapes by name",
+      "data": { "url": "data/sample_country_decade.csv" },
+      "transform": [
+        { "filter": "datum.decade == decade" },
+        {
+          "lookup": "country",
+          "from": {
+            "data": {
+              "url": "data/countries-110m.json",
+              "format": { "type": "topojson", "feature": "countries" }
+            },
+            "key": "properties.name"
+          },
+          "as": "geo"
+        },
+        { "filter": "datum.geo != null" }
+      ],
+      "params": [
+        { "name": "hover", "select": { "type": "point", "fields": ["country"], "on": "pointerover", "clear": "pointerout" } }
+      ],
+      "mark": { "type": "geoshape", "stroke": "#fcfcfb", "strokeWidth": 0.5 },
+      "encoding": {
+        "shape": { "field": "geo", "type": "geojson" },
+        "color": {
+          "field": "anomaly_c",
+          "type": "quantitative",
+          "title": "Anomaly (°C)",
+          "scale": {
+            "scheme": "redblue",
+            "reverse": true,
+            "domain": [-2.5, 2.5],
+            "domainMid": 0,
+            "clamp": true
+          },
+          "legend": { "orient": "bottom-left", "direction": "horizontal", "gradientLength": 180, "format": "+.1f" }
+        },
+        "strokeWidth": { "condition": { "param": "hover", "empty": false, "value": 1.5 }, "value": 0.5 },
+        "stroke": { "condition": { "param": "hover", "empty": false, "value": "#1f2328" }, "value": "#fcfcfb" },
+        "tooltip": [
+          { "field": "country", "title": "Country" },
+          { "field": "decade", "title": "Decade" },
+          { "field": "anomaly_c", "type": "quantitative", "title": "Anomaly (°C)", "format": "+.2f" }
+        ]
+      }
+    }
+  ]
+}

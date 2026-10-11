@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Change in mean global anomaly from one decade to the next. Taller bars mean faster warming.",
+  "title": {
+    "text": "How much warmer each decade was than the one before",
+    "subtitle": "Change in decade-average anomaly, °C (latest decade is incomplete)"
+  },
+  "width": "container",
+  "height": 280,
+  "data": { "url": "data/global_annual_anomaly.csv" },
+  "transform": [
+    { "calculate": "floor(datum.year / 10) * 10", "as": "decade" },
+    {
+      "aggregate": [
+        { "op": "mean", "field": "temp", "as": "decade_mean" },
+        { "op": "count", "as": "n_years" }
+      ],
+      "groupby": ["decade"]
+    },
+    {
+      "window": [{ "op": "lag", "field": "decade_mean", "as": "prev_mean" }],
+      "sort": [{ "field": "decade" }]
+    },
+    { "filter": "datum.prev_mean != null" },
+    { "calculate": "datum.decade_mean - datum.prev_mean", "as": "change" },
+    { "calculate": "datum.decade + 's'", "as": "decade_label" }
+  ],
+  "layer": [
+    {
+      "mark": { "type": "bar", "cornerRadiusEnd": 3, "width": { "band": 0.8 } },
+      "encoding": {
+        "x": {
+          "field": "decade_label",
+          "type": "ordinal",
+          "title": null,
+          "sort": { "field": "decade" },
+          "axis": { "labelAngle": 0, "labelExpr": "indexof(['1890s','1920s','1950s','1980s','2010s'], datum.label) >= 0 ? datum.label : ''" }
+        },
+        "y": {
+          "field": "change",
+          "type": "quantitative",
+          "title": "Change from previous decade (°C)",
+          "axis": { "format": "+.2f" }
+        },
+        "color": {
+          "condition": { "test": "datum.change < 0", "value": "#67a9cf" },
+          "value": "#b2182b"
+        },
+        "opacity": { "condition": { "test": "datum.n_years < 10", "value": 0.45 }, "value": 1 },
+        "tooltip": [
+          { "field": "decade_label", "title": "Decade" },
+          { "field": "change", "type": "quantitative", "title": "Change (°C)", "format": "+.2f" },
+          { "field": "decade_mean", "type": "quantitative", "title": "Decade average (°C)", "format": "+.2f" },
+          { "field": "n_years", "type": "quantitative", "title": "Years of data" }
+        ]
+      }
+    },
+    {
+      "mark": { "type": "rule", "color": "#9a968e" },
+      "encoding": { "y": { "datum": 0, "type": "quantitative" } }
+    }
+  ]
+}

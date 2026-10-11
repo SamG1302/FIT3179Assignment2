@@ -1,0 +1,224 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Global annual mean temperature anomaly with a 10-year rolling average.",
+  "title": {
+    "text": "Global temperature anomaly, 1880 to today",
+    "subtitle": "Difference from the long-term average, °C"
+  },
+  "width": "container",
+  "height": 320,
+  "data": {
+    "url": "data/global_annual_anomaly.csv"
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "mean",
+          "field": "temp",
+          "as": "rolling_mean"
+        }
+      ],
+      "sort": [
+        {
+          "field": "year"
+        }
+      ],
+      "frame": [
+        -5,
+        4
+      ]
+    }
+  ],
+  "layer": [
+    {
+      "description": "Zero line = the baseline average",
+      "mark": {
+        "type": "rule",
+        "color": "#9a968e",
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "y": {
+          "datum": 0,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "Annual values: thin and muted so the trend line stands out",
+      "mark": {
+        "type": "line",
+        "color": "#b9b6af",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "axis": {
+            "format": "d",
+            "grid": false,
+            "tickCount": 10
+          },
+          "scale": {
+            "zero": false,
+            "nice": false
+          }
+        },
+        "y": {
+          "field": "temp",
+          "type": "quantitative",
+          "title": "Anomaly (°C)",
+          "axis": {
+            "format": "+.1f"
+          }
+        }
+      }
+    },
+    {
+      "description": "10-year rolling mean: the main story line",
+      "mark": {
+        "type": "line",
+        "color": "#b2182b",
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "rolling_mean",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "Direct label on the trend line instead of a legend",
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "year",
+              "as": "last_year"
+            }
+          ]
+        },
+        {
+          "filter": "datum.year === datum.last_year - 5"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -6,
+        "dy": -14,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#b2182b"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "rolling_mean",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": "10-year average"
+        }
+      }
+    },
+    {
+      "description": "Hover: invisible points pick the nearest year and carry the tooltip",
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "year"
+            ],
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "size": 60,
+        "filled": true,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "temp",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 1
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "quantitative",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "temp",
+            "type": "quantitative",
+            "title": "Anomaly (°C)",
+            "format": "+.2f"
+          },
+          {
+            "field": "rolling_mean",
+            "type": "quantitative",
+            "title": "10-yr average (°C)",
+            "format": "+.2f"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Hover: vertical crosshair at the selected year",
+      "mark": {
+        "type": "rule",
+        "color": "#1f2328",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 0.4
+          },
+          "value": 0
+        }
+      }
+    }
+  ]
+}

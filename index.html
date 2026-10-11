@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Warming World | FIT3179 Assignment 2</title>
+  <meta name="description" content="How global average temperatures have changed over the past century, and whether warming is speeding up.">
+
+  <!-- Vega, Vega-Lite and Vega-Embed (pinned versions, loaded from a CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+
+  <!-- Pure.css (grid + base styles) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css">
+
+  <!-- Google Fonts: Source Serif 4 for headings, Inter for body text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+
+  <!-- Your styles (loaded last so they override Pure.css) -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ============================== HEADER ============================== -->
+    <header class="pure-g">
+      <div class="pure-u-1">
+        <p class="kicker">FIT3179 Data Visualisation · Assignment 2</p>
+        <h1>A warming world: how much, where, and how fast</h1>
+        <p class="lede">
+          TODO: One or two sentences that hook an average Australian reader. For example, what
+          today's temperatures mean compared with when their grandparents were young.
+        </p>
+        <!-- Remove this banner once every chart uses your real cleaned data -->
+        <p class="draft-banner">
+          <strong>Draft:</strong> maps 1 and 2 still show <em>synthetic sample data</em>
+          (files named <code>data/sample_*.csv</code>). Replace them with your cleaned data.
+        </p>
+      </div>
+    </header>
+
+    <!-- ===================== SECTION 1: THE LONG VIEW ===================== -->
+    <section class="pure-g story-row">
+      <div class="pure-u-1">
+        <h2>1. The long view</h2>
+        <p>
+          TODO: Explain the global annual anomaly line. Spell out the baseline (e.g. "compared with
+          the 1951–1980 average") and point readers to the key turning point.
+        </p>
+      </div>
+      <div class="pure-u-1">
+        <div id="vis-global-trend" class="vis-container"></div>
+        <p class="vis-caption">Hover over the chart to read individual years. The thick line is a 10-year rolling average.</p>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 2: IS IT SPEEDING UP? ==================== -->
+    <section class="pure-g story-row">
+      <div class="pure-u-1 pure-u-md-1-3">
+        <div class="description description-left">
+          <h2>2. Is warming speeding up?</h2>
+          <p>
+            TODO: Each bar is how much warmer a decade was than the decade before. Taller bars
+            in recent decades mean the warming is accelerating.
+          </p>
+        </div>
+      </div>
+      <div class="pure-u-1 pure-u-md-2-3">
+        <div id="vis-decade-rate" class="vis-container"></div>
+      </div>
+    </section>
+
+    <!-- ================ SECTION 3: MAP 1 — CHOROPLETH ===================== -->
+    <section class="pure-g story-row">
+      <div class="pure-u-1">
+        <h2>3. Where is it warming? <span class="idiom-tag">Choropleth map</span></h2>
+        <p>
+          TODO: Describe the pattern across countries. Mention where Australia sits.
+          Drag the slider to step through the decades.
+        </p>
+      </div>
+      <div class="pure-u-1">
+        <div id="vis-map-choropleth" class="vis-container"></div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 4: MAP 2 — PROPORTIONAL SYMBOLS =============== -->
+    <section class="pure-g story-row">
+      <div class="pure-u-1 pure-u-md-2-3">
+        <div id="vis-map-cities" class="vis-container"></div>
+      </div>
+      <div class="pure-u-1 pure-u-md-1-3">
+        <div class="description description-right">
+          <h2>4. Cities feeling the heat <span class="idiom-tag">Proportional symbol map</span></h2>
+          <p>
+            TODO: Circle size shows how much each city has warmed. Compare Melbourne, Sydney
+            and Darwin with cities overseas.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== SECTION 5: MAP 3 — BIN MAP ====================== -->
+    <section class="pure-g story-row">
+      <div class="pure-u-1">
+        <h2>5. Poles versus tropics <span class="idiom-tag">Bin map (5° grid)</span></h2>
+        <p>
+          TODO: Gridded data removes country borders, so you can see the pattern itself. Drag the
+          slider from the 1900s to the 2020s and point out that the far north warms fastest
+          (Arctic amplification).
+        </p>
+      </div>
+      <div class="pure-u-1">
+        <div id="vis-map-grid" class="vis-container"></div>
+      </div>
+    </section>
+
+    <!-- ============== SECTION 6: SEASONS (add your own chart) ============== -->
+    <section class="pure-g story-row">
+      <div class="pure-u-1">
+        <h2>6. Hotter summers, milder winters?</h2>
+        <p>
+          TODO: Add a seasonal chart here (e.g. a month × decade heatmap). Copy a spec in
+          <code>specs/</code>, add a <code>&lt;div id="vis-seasons"&gt;</code> and register it in
+          <code>js/main.js</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================= CONCLUSION =============================== -->
+    <section class="pure-g story-row">
+      <div class="pure-u-1">
+        <h2>What the data tells us</h2>
+        <p>TODO: Two or three takeaways, plus what they mean for Australia.</p>
+      </div>
+    </section>
+
+    <!-- =========================== FOOTER ================================= -->
+    <footer class="pure-g">
+      <div class="pure-u-1 small-font">
+        <p>
+          <strong>Data sources:</strong>
+          TODO: List each dataset with a link (e.g. NASA GISTEMP, Our World in Data).
+          Gridded temperatures: <a href="https://berkeleyearth.org/data/" target="_blank" rel="noopener">Berkeley Earth</a>
+          high-resolution 5° global TAVG (CC BY-NC 4.0).
+          Map boundaries: <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">world-atlas</a> (Natural Earth, 1:110m).
+        </p>
+        <p>
+          Created by TODO: Your Name for FIT3179, Monash University, 2026.
+          Built with <a href="https://vega.github.io/vega-lite/" target="_blank" rel="noopener">Vega-Lite</a>
+          and <a href="https://purecss.io/" target="_blank" rel="noopener">Pure.css</a>.
+        </p>
+      </div>
+    </footer>
+
+  </div> <!-- end .page -->
+
+  <!-- Embeds every chart. Edit this file to add or remove visualisations. -->
+  <script src="js/main.js"></script>
+</body>
+
+</html>
