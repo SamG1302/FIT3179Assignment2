@@ -141,11 +141,12 @@
             "clamp": true
           },
           "legend": {
-            "orient": "bottom-left",
+            "orient": "bottom",
             "direction": "horizontal",
-            "gradientLength": 180,
+            "gradientLength": 220,
             "format": "+.0f",
-            "offset": 0
+            "offset": 20,
+            "titlePadding": 6
           }
         },
         "strokeWidth": {

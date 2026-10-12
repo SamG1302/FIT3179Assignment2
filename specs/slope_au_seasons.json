@@ -106,7 +106,7 @@
       ]
     },
     {
-      "calculate": "datum.season + '  ' + format(datum.season_change, '+.2f') + ' °C'",
+      "calculate": "datum.season + '  ' + format(datum.season_change, '+.2f') + '°C'",
       "as": "end_label"
     }
   ],

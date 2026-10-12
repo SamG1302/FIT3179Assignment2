@@ -23,7 +23,7 @@
 
   <!-- Your styles (loaded last so they override Pure.css) -->
   <!-- "?v=..." makes browsers fetch the new file after each update: bump the number whenever you change it -->
-  <link rel="stylesheet" href="css/styles.css?v=4">
+  <link rel="stylesheet" href="css/styles.css?v=9">
 </head>
 
 <body>
@@ -31,24 +31,24 @@
 
     <!-- ============================== HEADER ============================== -->
     <header class="hero">
-      <p class="kicker">FIT3179 Data Visualisation · Assignment 2</p>
-      <h1>The world is warming, and faster than it used to</h1>
-      <p class="byline">By Samuel Gunawan</p>
-      <p class="lede">
-        Every year since 1977 has been warmer than the 1951–1980 global average. Anyone born since
-        then has never lived through a year cooler than the average their grandparents grew up with. This page follows that change from 1880 to 2025, around the world
-        and in Australia.
-      </p>
-
-      <!-- Two equal key-number tiles -->
-      <div class="pure-g row-2 stat-row">
+      <div class="pure-g row-2 hero-row">
         <div class="pure-u-1 pure-u-md-1-2 col">
+          <p class="kicker">FIT3179 Data Visualisation · Assignment 2</p>
+          <h1>The world is warming, and faster than it used to</h1>
+          <p class="byline">By Samuel Gunawan</p>
+          <p class="lede">
+            Every year since 1977 has been warmer than the 1951–1980 global average. Anyone born
+            since then has never lived through a year cooler than the average their grandparents
+            grew up with. This page follows that change from 1880 to 2025, around the world and in
+            Australia.
+          </p>
+        </div>
+        <!-- Two key-number tiles, stacked to balance the title block -->
+        <div class="pure-u-1 pure-u-md-1-2 col stat-stack">
           <div class="stat">
-            <p class="stat-number">+1.28 °C</p>
+            <p class="stat-number">+1.28°C</p>
             <p class="stat-label">Global temperature in 2024, the warmest year on record, compared with the 1951–1980 average (NASA GISTEMP)</p>
           </div>
-        </div>
-        <div class="pure-u-1 pure-u-md-1-2 col">
           <div class="stat">
             <p class="stat-number">10 of 10</p>
             <p class="stat-label">of the warmest years on record happened between 2015 and 2025 (NASA GISTEMP)</p>
@@ -59,35 +59,50 @@
       <!-- Reading guide: what an anomaly is and how colour is used -->
       <aside class="reading-guide">
         <p class="guide-title">How to read these charts</p>
+        <div class="pure-g row-2">
+        <div class="pure-u-1 pure-u-md-1-2 col">
         <p>
           Most charts show a temperature <strong>anomaly</strong>: the difference from a long-term
-          average. An anomaly of +1 °C means one degree warmer than that average. Unless a chart
-          says otherwise, the average is for <strong>1951–1980</strong>, so 0 °C is "normal for the
+          average. An anomaly of +1°C means one degree warmer than that average. Unless a chart
+          says otherwise, the average is for <strong>1951–1980</strong>, so 0°C is "normal for the
           mid-20th century".
         </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col">
         <p>
           <span class="swatch swatch-warm"></span>Red means warmer than the average and
           <span class="swatch swatch-cool"></span>blue means cooler. Grey marks places or periods
           with no data. Hover over any chart for exact values.
         </p>
+        </div>
+        </div>
       </aside>
     </header>
 
     <!-- ===================== PART 1: THE LONG VIEW ======================== -->
     <section class="part">
-      <div class="part-head">
-        <p class="part-label">Part 1 · The long view</p>
-        <h2>The world is about 1.3 °C warmer than a century ago</h2>
-        <p class="section-intro">
-          Until the 1970s, global temperature rose and fell by a few tenths of a degree, including a
-          temporary warm spell around the 1940s. From the late 1970s it began a steady climb, and the
-          10-year average has risen by about 0.2 °C every decade since. The 2016–2025 average was
-          1.3 °C above the 1901–1930 average.
-        </p>
-        <p class="section-intro">
-          The heatmap below the line breaks each year into its 12 months. The shift from blue to red
-          happens in every month at about the same time, so the change covers the whole year.
-        </p>
+      <div class="pure-g row-2 part-head">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+            <p class="part-label">Part 1 · The long view</p>
+            <h2>The world is about 1.3°C warmer than a century ago</h2>
+            <p class="section-intro">
+              Until the 1970s, global temperature rose and fell by a few tenths of a degree, including a
+              temporary warm spell around the 1940s. From the late 1970s it began a steady climb, and the
+              10-year average has risen by about 0.2°C every decade since. The 2016–2025 average was
+              1.3°C above the 1901–1930 average.
+            </p>
+            <p class="section-intro">
+              The heatmap below the line breaks each year into its 12 months. The shift from blue to red
+              happens in every month at about the same time, so the change covers the whole year.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col col-aside">
+          <aside class="key-figure">
+            <p class="key-number">1.3°C</p>
+            <p class="key-label">warmer in 2016–2025 than in 1901–1930</p>
+            <p class="key-source">NASA GISTEMP</p>
+          </aside>
+        </div>
       </div>
       <figure class="figure">
         <div id="vis-global-trend" class="vis-container"></div>
@@ -101,19 +116,28 @@
 
     <!-- ================= PART 2: IS IT SPEEDING UP? ======================= -->
     <section class="part">
-      <div class="part-head">
-        <p class="part-label">Part 2 · The pace of change</p>
-        <h2>Warming has sped up since 1980</h2>
-        <p class="section-intro">
-          Between 1880 and 1939 the world warmed by about 0.01 °C per decade. Over 1980–2025 the rate
-          was 0.21 °C per decade, and since 2010 it has been about 0.36 °C. The left chart shows this
-          decade by decade: since the 1960s, each decade has been warmer than the one before.
-        </p>
-        <p class="section-intro">
-          The right chart tracks the ten warmest years on record as the record grew. Older years drop
-          out as newer, hotter ones arrive. By 2025, every year in the top ten falls between 2015 and
-          2025.
-        </p>
+      <div class="pure-g row-2 part-head">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+            <p class="part-label">Part 2 · The pace of change</p>
+            <h2>Warming has sped up since 1980</h2>
+            <p class="section-intro">
+              Between 1880 and 1939 the world warmed by about 0.01°C per decade. Over 1980–2025 the rate
+              was 0.21°C per decade, and since 2010 it has been about 0.36°C. The left chart shows this
+              decade by decade: since the 1960s, each decade has been warmer than the one before.
+            </p>
+            <p class="section-intro">
+              The right chart tracks the ten warmest years on record as the record grew. Older years drop
+              out as newer, hotter ones arrive. By 2025, every year in the top ten falls between 2015 and
+              2025.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col col-aside">
+          <aside class="key-figure">
+            <p class="key-number">0.36°C</p>
+            <p class="key-label">of warming per decade since 2010, up from 0.01°C per decade in 1880–1939</p>
+            <p class="key-source">NASA GISTEMP</p>
+          </aside>
+        </div>
       </div>
       <div class="pure-g row-2">
         <div class="pure-u-1 pure-u-md-1-2 col">
@@ -141,19 +165,28 @@
 
     <!-- ================= PART 3: WHERE IS IT WARMING? ===================== -->
     <section class="part">
-      <div class="part-head">
-        <p class="part-label">Part 3 · Around the world</p>
-        <h2>Every country is warmer, and the far north most of all</h2>
-        <p class="section-intro">
-          All 194 countries in the data were warmer in 1996–2025 than in 1951–1980. The typical
-          country warmed by about 1.1 °C. Australia warmed by 0.43 °C, less than most, while Malaysia
-          warmed by 1.07 °C, close to the typical amount.
-        </p>
-        <p class="section-intro">
-          Countries are uneven units, so the second map uses equal 5° grid squares that also cover the
-          oceans. It shows the Arctic (north of 60°N) warming at about 0.56 °C per decade since 1980,
-          almost three times the global rate of 0.21 °C.
-        </p>
+      <div class="pure-g row-2 part-head">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+            <p class="part-label">Part 3 · Around the world</p>
+            <h2>Every country is warmer, and the far north most of all</h2>
+            <p class="section-intro">
+              All 194 countries in the data were warmer in 1996–2025 than in 1951–1980. The typical
+              country warmed by about 1.1°C. Australia warmed by 0.43°C, less than most, while Malaysia
+              warmed by 1.07°C, close to the typical amount.
+            </p>
+            <p class="section-intro">
+              Countries are uneven units, so the second map uses equal 5° grid squares that also cover the
+              oceans. It shows the Arctic (north of 60°N) warming at about 0.56°C per decade since 1980,
+              almost three times the global rate of 0.21°C.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col col-aside">
+          <aside class="key-figure">
+            <p class="key-number">0.56°C</p>
+            <p class="key-label">per decade in the Arctic since 1980, almost three times the global rate</p>
+            <p class="key-source">Berkeley Earth 5° grid</p>
+          </aside>
+        </div>
       </div>
       <figure class="figure">
         <div id="vis-map-choropleth" class="vis-container"></div>
@@ -175,20 +208,29 @@
 
     <!-- ================= PART 4: COUNTRY BY COUNTRY ======================= -->
     <section class="part">
-      <div class="part-head">
-        <p class="part-label">Part 4 · Country by country</p>
-        <h2>Most countries are warming faster than before</h2>
-        <p class="section-intro">
-          The map compares each country's warming rate since 1980 with its rate in 1950–1979. In 168
-          of 194 countries the rate has increased. Australia changed from a slight cooling of 0.20 °C
-          per decade to a warming of 0.13 °C per decade.
-        </p>
-        <p class="section-intro">
-          The two charts below give the detail. The jitter plot places every country in every decade,
-          so you can see the whole spread move upward. The dumbbell chart compares the two rates for 19
-          countries. Russia's rate rose the most of these; India and New Zealand are the two that
-          slowed slightly.
-        </p>
+      <div class="pure-g row-2 part-head">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+            <p class="part-label">Part 4 · Country by country</p>
+            <h2>Most countries are warming faster than before</h2>
+            <p class="section-intro">
+              The map compares each country's warming rate since 1980 with its rate in 1950–1979. In 168
+              of 194 countries the rate has increased. Australia changed from a slight cooling of 0.20°C
+              per decade to a warming of 0.13°C per decade.
+            </p>
+            <p class="section-intro">
+              The two charts below give the detail. The jitter plot places every country in every decade,
+              so you can see the whole spread move upward. The dumbbell chart compares the two rates for 19
+              countries. Russia's rate rose the most of these; India and New Zealand are the two that
+              slowed slightly.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col col-aside">
+          <aside class="key-figure">
+            <p class="key-number">168 of 194</p>
+            <p class="key-label">countries are warming faster since 1980 than they did in 1950–1979</p>
+            <p class="key-source">Our World in Data (ERA5)</p>
+          </aside>
+        </div>
       </div>
       <figure class="figure">
         <div id="vis-map-symbols" class="vis-container"></div>
@@ -224,20 +266,29 @@
 
     <!-- ================= PART 5: AUSTRALIA'S SEASONS ====================== -->
     <section class="part">
-      <div class="part-head">
-        <p class="part-label">Part 5 · Australia</p>
-        <h2>Australia: spring and summer have warmed most</h2>
-        <p class="section-intro">
-          Comparing 2000–2025 with 1951–1980, Australian spring (September to November) warmed by
-          0.66 °C and summer (December to February) by 0.54 °C. Winter warmed by 0.40 °C and autumn by
-          0.18 °C, so the warming is uneven across the year.
-        </p>
-        <p class="section-intro">
-          The circular chart shows the same months decade by decade, with the 1940s at the centre and
-          the 2020s on the outside edge. The outer ring is the reddest, and August and September in
-          the 2020s have averaged 1.2 to 1.3 °C above their 1951–1980 level. Australia's warmest year
-          in this data was 2019.
-        </p>
+      <div class="pure-g row-2 part-head">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+            <p class="part-label">Part 5 · Australia</p>
+            <h2>Australia: spring and summer have warmed most</h2>
+            <p class="section-intro">
+              Comparing 2000–2025 with 1951–1980, Australian spring (September to November) warmed by
+              0.66°C and summer (December to February) by 0.54°C. Winter warmed by 0.40°C and autumn by
+              0.18°C, so the warming is uneven across the year.
+            </p>
+            <p class="section-intro">
+              The circular chart shows the same months decade by decade, with the 1940s at the centre and
+              the 2020s on the outside edge. The outer ring is the reddest, and August and September in
+              the 2020s have averaged 1.2 to 1.3°C above their 1951–1980 level. Australia's warmest year
+              in this data was 2019.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col col-aside">
+          <aside class="key-figure">
+            <p class="key-number">+0.66°C</p>
+            <p class="key-label">in Australian spring, the season that warmed most (2000–2025 vs 1951–1980)</p>
+            <p class="key-source">Our World in Data (ERA5)</p>
+          </aside>
+        </div>
       </div>
       <div class="pure-g row-2">
         <div class="pure-u-1 pure-u-md-1-2 col">
@@ -265,16 +316,25 @@
 
     <!-- ================= PART 6: DAYS AND NIGHTS ========================== -->
     <section class="part">
-      <div class="part-head">
-        <p class="part-label">Part 6 · Day and night</p>
-        <h2>Nights warmed first, then days caught up</h2>
-        <p class="section-intro">
-          Over global land, night-time lows started rising earlier than daytime highs. By the 1980s,
-          nights were 0.52 °C warmer than in the 1950s while days were only 0.22 °C warmer. Daytime
-          highs then rose faster, and by 2010–2015 both were about 1.0 °C above their 1950s level.
-          Warmer nights matter for health, because they give the body less chance to recover after a
-          hot day. This dataset ends in 2015.
-        </p>
+      <div class="pure-g row-2 part-head">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+            <p class="part-label">Part 6 · Day and night</p>
+            <h2>Nights warmed first, then days caught up</h2>
+            <p class="section-intro">
+              Over global land, night-time lows started rising earlier than daytime highs. By the 1980s,
+              nights were 0.52°C warmer than in the 1950s while days were only 0.22°C warmer. Daytime
+              highs then rose faster, and by 2010–2015 both were about 1.0°C above their 1950s level.
+              Warmer nights matter for health, because they give the body less chance to recover after a
+              hot day. This dataset ends in 2015.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col col-aside">
+          <aside class="key-figure">
+            <p class="key-number">0.52 vs 0.22°C</p>
+            <p class="key-label">warming of nights vs days by the 1980s, compared with the 1950s</p>
+            <p class="key-source">Berkeley Earth</p>
+          </aside>
+        </div>
       </div>
       <figure class="figure">
         <div id="vis-butterfly" class="vis-container"></div>
@@ -288,54 +348,72 @@
 
     <!-- ========================= CONCLUSION =============================== -->
     <section class="part part-conclusion">
-      <div class="part-head">
-        <p class="part-label">Conclusion</p>
-        <h2>What the data shows</h2>
-        <p class="section-intro">
-          The world is about 1.3 °C warmer than in the early 1900s, and most of that rise has happened
-          since 1980. Separate records agree on this: NASA's global series matches both the Copernicus
-          ERA5 data and Berkeley Earth's grid closely (a correlation of 0.99 in each case).
-        </p>
-        <p class="section-intro">
-          The rate of warming has also increased. It was close to zero before 1940, about 0.2 °C per
-          decade after 1980, and higher again since 2010. Most countries show the same increase, and
-          the Arctic is warming fastest.
-        </p>
-        <p class="section-intro">
-          Australia has warmed less than the global average, but its springs and summers have warmed
-          noticeably, and four of its five warmest years have come since 2013. If the post-1980 rate
-          continues, each coming decade will add roughly another 0.2 °C to the global figure.
-        </p>
+      <div class="pure-g row-2 part-head">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+            <p class="part-label">Conclusion</p>
+            <h2>What the data shows</h2>
+            <p class="section-intro">
+              The world is about 1.3°C warmer than in the early 1900s, and most of that rise has happened
+              since 1980. Separate records agree on this: NASA's global series matches both the Copernicus
+              ERA5 data and Berkeley Earth's grid closely (a correlation of 0.99 in each case).
+            </p>
+            <p class="section-intro">
+              The rate of warming has also increased. It was close to zero before 1940, about 0.2°C per
+              decade after 1980, and higher again since 2010. Most countries show the same increase, and
+              the Arctic is warming fastest.
+            </p>
+            <p class="section-intro">
+              Australia has warmed less than the global average, but its springs and summers have warmed
+              noticeably, and four of its five warmest years have come since 2013. If the post-1980 rate
+              continues, each coming decade will add roughly another 0.2°C to the global figure.
+            </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col col-aside">
+          <aside class="key-figure key-list">
+            <p class="key-title">Key numbers</p>
+            <dl>
+              <dt>1.3°C</dt><dd>warmer than in 1901–1930</dd>
+              <dt>0.21 → 0.36°C</dt><dd>per decade: 1980–2025 vs since 2010</dd>
+              <dt>168 of 194</dt><dd>countries warming faster since 1980</dd>
+              <dt>4 of 5</dt><dd>of Australia's warmest years since 2013</dd>
+            </dl>
+          </aside>
+        </div>
       </div>
     </section>
 
     <!-- =========================== FOOTER ================================= -->
     <footer class="site-footer">
-
-      <p>
-        <strong>Data sources.</strong>
-        Global temperatures: <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISS Surface Temperature Analysis (GISTEMP v4)</a>.
-        Country temperatures: <a href="https://ourworldindata.org/grapher/annual-temperature-anomalies" target="_blank" rel="noopener">Our World in Data</a>,
-        based on Copernicus Climate Change Service ERA5.
-        Gridded temperatures: <a href="https://berkeleyearth.org/data/" target="_blank" rel="noopener">Berkeley Earth</a>
-        high-resolution 5° global TAVG (CC BY-NC 4.0).
-        Daytime highs and night-time lows: Berkeley Earth via
-        <a href="https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data" target="_blank" rel="noopener">Kaggle</a> (to 2015).
-        Country boundaries: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> 1:110m, converted to TopoJSON with
-        <a href="https://mapshaper.org/" target="_blank" rel="noopener">mapshaper</a>; coastlines from
-        <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">world-atlas</a>.
-      </p>
-      <p>
-        Created by Samuel Gunawan for FIT3179, Monash University, 2026.
-        Built with <a href="https://vega.github.io/vega-lite/" target="_blank" rel="noopener">Vega-Lite</a>
-        and <a href="https://purecss.io/" target="_blank" rel="noopener">Pure.css</a>.
-      </p>
+      <div class="pure-g row-2">
+        <div class="pure-u-1 pure-u-md-1-2 col">
+          <p>
+            <strong>Data sources.</strong>
+            Global temperatures: <a href="https://data.giss.nasa.gov/gistemp/" target="_blank" rel="noopener">NASA GISS Surface Temperature Analysis (GISTEMP v4)</a>.
+            Country temperatures: <a href="https://ourworldindata.org/grapher/annual-temperature-anomalies" target="_blank" rel="noopener">Our World in Data</a>,
+            based on Copernicus Climate Change Service ERA5.
+            Gridded temperatures: <a href="https://berkeleyearth.org/data/" target="_blank" rel="noopener">Berkeley Earth</a>
+            high-resolution 5° global TAVG (CC BY-NC 4.0).
+            Daytime highs and night-time lows: Berkeley Earth via
+            <a href="https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data" target="_blank" rel="noopener">Kaggle</a> (to 2015).
+            Country boundaries: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> 1:110m, converted to TopoJSON with
+            <a href="https://mapshaper.org/" target="_blank" rel="noopener">mapshaper</a>; coastlines from
+            <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">world-atlas</a>.
+          </p>
+        </div>
+        <div class="pure-u-1 pure-u-md-1-2 col">
+          <p>
+            Created by Samuel Gunawan for FIT3179, Monash University, 2026.
+            Built with <a href="https://vega.github.io/vega-lite/" target="_blank" rel="noopener">Vega-Lite</a>
+            and <a href="https://purecss.io/" target="_blank" rel="noopener">Pure.css</a>.
+          </p>
+        </div>
+      </div>
     </footer>
 
   </div> <!-- end .page -->
 
   <!-- Embeds every chart. Edit this file to add or remove visualisations. -->
-  <script src="js/main.js?v=4"></script>
+  <script src="js/main.js?v=9"></script>
 </body>
 
 </html>

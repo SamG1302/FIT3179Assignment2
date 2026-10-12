@@ -5,7 +5,8 @@
     "text": "How fast each country is warming",
     "subtitle": [
       "Circle area = warming rate 1980–2025, °C per decade",
-      "Colour = faster or slower than 1950–1979 · Our World in Data (ERA5)"
+      "Colour = faster or slower than 1950–1979",
+      "Our World in Data (ERA5)"
     ]
   },
   "width": "container",
@@ -108,7 +109,8 @@
             ]
           },
           "legend": {
-            "orient": "bottom-left",
+            "orient": "bottom",
+            "direction": "horizontal",
             "values": [
               0.1,
               0.3,
@@ -117,7 +119,9 @@
             "format": ".1f",
             "symbolFillColor": "#9a968e",
             "symbolStrokeColor": "#fcfcfb",
-            "offset": 0
+            "offset": 20,
+            "titlePadding": 6,
+            "labelOffset": 6
           }
         },
         "color": {
@@ -135,7 +139,10 @@
             ]
           },
           "legend": {
-            "orient": "bottom-right"
+            "orient": "bottom",
+            "direction": "horizontal",
+            "offset": 20,
+            "titlePadding": 6
           }
         },
         "opacity": {

@@ -369,3 +369,147 @@ code {
   color: var(--ink);
   margin-top: 12px;
 }
+
+/* ---- Line length and leading (FIT2179 Course Notes 11: Typography) ------
+   "A line should not contain more than approximately 60 characters" and
+   "between seven and ten words on a line generally results in good
+   readability". Longer lines also need more leading (line spacing).
+   Text stays left-aligned, as the notes recommend for multi-line text. */
+p {
+  max-width: 52ch;
+  line-height: 1.7;
+}
+
+.lede {
+  max-width: 46ch;
+  color: #3d434b;           /* darker than before: grey text lowers contrast */
+}
+
+.caption,
+.reading-guide p,
+.site-footer p {
+  max-width: 58ch;          /* smaller text, so a slightly larger ch count */
+  color: #4d535c;
+}
+
+.caption {
+  line-height: 1.6;
+}
+
+/* ---- Visual balance (FIT2179 Course Notes 9: Layout) --------------------
+   Text blocks keep a readable ~60-character measure, so on their own they
+   fill only the left half of the page. Each heading row is therefore a
+   symmetric pair of equal columns: the text on the left and a key figure on
+   the right, which balances the visual weight around the central axis. */
+
+/* Hero: title block | two stacked key-number tiles */
+.hero-row {
+  align-items: stretch;
+}
+
+.stat-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gutter);
+}
+
+.stat-stack .stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-row { margin-top: 0; }
+
+/* Section heading rows: text | key figure */
+.part-head {
+  align-items: stretch;
+}
+
+.col-aside {
+  display: flex;
+}
+
+.key-figure {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--tint);
+  border-top: 3px solid var(--accent);
+  padding: 24px 28px;
+  box-sizing: border-box;
+}
+
+.key-number {
+  font-family: var(--font-head);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+
+.key-label {
+  font-size: 1rem;
+  color: var(--ink);
+  margin: 0 0 10px;
+  max-width: 34ch;
+}
+
+.key-source {
+  font-size: 0.8rem;
+  color: #4d535c;
+  margin: 0;
+}
+
+/* Conclusion: a short list of key numbers */
+.key-title {
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.key-list dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 16px;
+  row-gap: 10px;
+  align-items: baseline;
+}
+
+.key-list dt {
+  font-family: var(--font-head);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.key-list dd {
+  margin: 0;
+  color: var(--ink);
+}
+
+/* Text inside equal columns fills its column (the column sets the measure) */
+.part-head .col p,
+.reading-guide .col p,
+.site-footer .col p {
+  max-width: none;
+}
+
+.part-head h2 {
+  max-width: none;
+}
+
+/* On phones everything stacks: give the key figure some space above */
+@media (max-width: 767px) {
+  .col-aside {
+    margin-top: 20px;
+  }
+
+  .key-number {
+    font-size: 2.1rem;
+  }
+}
