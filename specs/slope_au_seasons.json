@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Slope chart: how much warmer each Australian season was in 2000–2025 than in 1951–1980 (OWID / ERA5 monthly, owid_monthly_focus.csv). Every season starts at 0 (its own 1951–1980 average), so the slope is the warming. Summer = Dec–Feb, with December counted toward the following summer. Line colour = amount of warming; labels replace a legend.",
+  "description": "Slope chart: how much warmer each Australian season was in 2000–2025 than in 1951–1980 (OWID / ERA5 monthly, owid_monthly_focus.csv). Every season starts at 0 (its own 1951–1980 average), so the slope is the warming. Summer = Dec–Feb, with December counted toward the following summer. Labels replace a legend.",
   "title": {
     "text": "Australia: every season is warmer, spring and summer most",
     "subtitle": [
@@ -149,21 +149,6 @@
         ]
       }
     },
-    "color": {
-      "field": "season_change",
-      "type": "quantitative",
-      "scale": {
-        "domain": [
-          0,
-          0.8
-        ],
-        "range": [
-          "#f4c7b0",
-          "#b2182b"
-        ]
-      },
-      "legend": null
-    },
     "detail": {
       "field": "season"
     },
@@ -179,13 +164,7 @@
       {
         "field": "change",
         "type": "quantitative",
-        "title": "vs 1951–1980 (°C)",
-        "format": "+.2f"
-      },
-      {
-        "field": "anomaly",
-        "type": "quantitative",
-        "title": "vs 1991–2020 (°C, as supplied)",
+        "title": "Warmer than 1951–1980 by (°C)",
         "format": "+.2f"
       }
     ]
@@ -194,14 +173,16 @@
     {
       "mark": {
         "type": "line",
-        "strokeWidth": 3
+        "strokeWidth": 3,
+        "color": "#1f2328"
       }
     },
     {
       "mark": {
         "type": "circle",
         "size": 80,
-        "opacity": 1
+        "opacity": 1,
+        "color": "#1f2328"
       }
     },
     {
@@ -221,8 +202,7 @@
       "encoding": {
         "text": {
           "field": "end_label"
-        },
-        "color": null
+        }
       }
     }
   ]

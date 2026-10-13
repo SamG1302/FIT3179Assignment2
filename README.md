@@ -22,9 +22,9 @@ The page tells the story in six parts. Every row is either one full-width chart 
 | 1 | `vis-global-trend` | `line_heatmap_global.json` | Line chart + month×year heatmap, linked by a brush (one `vconcat` spec) | `gistemp_global.csv`, `gistemp_monthly.csv` |
 | 2 | `vis-decade-rate` | `lollipop_decade_rate.json` | Lollipop chart (decade-on-decade change) | `gistemp_global.csv` |
 | 2 | `vis-hottest-years` | `bump_hottest_years.json` | Bump chart (running top-10 hottest years), click to highlight | `gistemp_hottest_ranks.csv` |
-| 3 | `vis-map-choropleth` | `map_choropleth_year.json` | **Map 1: choropleth**, year slider 1940–2025 | `owid_annual_countries.csv` + `ne_110m_countries.topojson` |
-| 3 | `vis-map-grid` | `map_bin_grid.json` | **Map 3: bin map** (5° grid), decade slider | `be_grid_decades.csv` + `be_grid_cells.geojson` |
-| 4 | `vis-map-symbols` | `map_symbols_countries.json` | **Map 2: proportional symbol**, legend filter | `owid_country_summary.csv` + `country_points.csv` |
+| 3 | `vis-map-choropleth` | `map_choropleth_year.json` | **Map 1: choropleth**: temperature *level* in a chosen year, slider 1940–2025 | `owid_annual_countries.csv` + `ne_110m_countries.topojson` |
+| 3 | `vis-map-grid` | `map_bin_grid.json` | **Map 3: bin map** (5° grid): warming *rate* since 1980, same Equal Earth projection as the choropleth | `be_grid_cells.geojson` (`properties.rate_recent`) |
+| 4 | `vis-map-symbols` | `map_symbols_countries.json` | **Map 2: proportional symbol**: *change* in warming rate (1980–2025 vs 1950–1979), legend filter | `owid_country_summary.csv` + `country_points.csv` |
 | 4 | `vis-jitter` | `jitter_country_decades.json` | Jitter plot, country dropdown (Australia by default) | `owid_annual_countries.csv` (+ names from `owid_country_summary.csv`) |
 | 4 | `vis-dumbbell` | `dumbbell_country_rates.json` | Dumbbell chart (warming rate 1950–79 vs 1980–2025) | `owid_country_summary.csv` |
 | 5 | `vis-slope` | `slope_au_seasons.json` | Slope chart (Australian seasons) | `owid_monthly_focus.csv` |
@@ -50,10 +50,16 @@ It writes them to `Datasets/clean/`, from where they're copied into `data/`.
 | `owid_monthly_focus.csv` | OWID monthly anomalies for World and Australia, 1940–2026 | 1991–2020 as supplied; the slope chart shows change since 1951–1980 and the radial heatmap re-baselines each month to 1951–1980 |
 | `be_global_land.csv` | Berkeley Earth (Kaggle) global land average / max / min, 1850–2015 | 1951–1980; the butterfly shows change since the 1950s |
 | `be_grid_cells.geojson` | Berkeley Earth 5° gridded TAVG (land + ocean), one clockwise square per cell, with `id` | – |
-| `be_grid_decades.csv` | Same grid: decade-average anomaly per cell (`id, decade, anomaly`). A decade needs ≥ 5 complete years | 1951–1980 |
 | `ne_110m_countries.topojson` | Natural Earth 1:110m Admin 0 – Countries, converted with mapshaper (`-filter-fields ADM0_A3,NAME`) | – |
 | `country_points.csv` | Made from the TopoJSON with mapshaper: `-points inner -each 'lon=+this.x.toFixed(2), lat=+this.y.toFixed(2)' -rename-fields map_id=ADM0_A3 -o format=csv` | – |
 | `land-110m.json` | world-atlas 2.0.2 (Natural Earth land, 1:110m), used for coastlines | – |
+
+### Colour rules
+
+- **Red / white / blue** = warmer / no change / cooler (temperature only). One explicit 7-stop scale, white at 0, so near-zero cells never look like the page background.
+- **Purple** = rate of change of warming (symbol map, dumbbell). Never used for temperature.
+- **Grey** = no data, or context marks. **Amber / dark slate** = daytime highs / night-time lows.
+- Charts that need no colour (slope chart, bump chart, jitter plot) use dark ink and grey only.
 
 Joins: the OWID files join to the map on `map_id` = `properties.ADM0_A3`, and the grid joins on `id` = `properties.id`.
 

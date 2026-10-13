@@ -107,7 +107,7 @@
         "color": {
           "condition": {
             "test": "datum.change < 0",
-            "value": "#4393c3"
+            "value": "#2166ac"
           },
           "value": "#b2182b"
         },
@@ -132,7 +132,7 @@
           {
             "field": "decade_mean",
             "type": "quantitative",
-            "title": "Decade average (°C)",
+            "title": "Decade average vs 1951–1980 (°C)",
             "format": "+.2f"
           },
           {
@@ -168,7 +168,7 @@
         "color": {
           "condition": {
             "test": "datum.change < 0",
-            "value": "#4393c3"
+            "value": "#2166ac"
           },
           "value": "#b2182b"
         },
@@ -193,7 +193,7 @@
           {
             "field": "decade_mean",
             "type": "quantitative",
-            "title": "Decade average (°C)",
+            "title": "Decade average vs 1951–1980 (°C)",
             "format": "+.2f"
           },
           {
@@ -242,6 +242,38 @@
         "values": [
           {}
         ]
+      }
+    },
+    {
+      "description": "Annotation: largest complete-decade jump (2010s)",
+      "transform": [
+        {
+          "filter": "datum.decade == 2010"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "dy": -14,
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "x": {
+          "field": "decade_label",
+          "type": "ordinal",
+          "sort": {
+            "field": "decade"
+          }
+        },
+        "y": {
+          "field": "change",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": "+0.22°C"
+        }
       }
     }
   ]

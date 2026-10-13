@@ -4,8 +4,8 @@
   "title": {
     "text": "Every country, decade by decade",
     "subtitle": [
-      "Decade-average anomaly vs each country's 1951–1980 mean, °C",
-      "Our World in Data (ERA5) · dash = median country · 2020s = 2020–2025"
+      "Decade average vs each country's 1951–1980 average, °C",
+      "Grey dash = middle (median) country · Our World in Data (ERA5)"
     ]
   },
   "width": "container",
@@ -213,8 +213,8 @@
       "mark": {
         "type": "circle",
         "size": 22,
-        "color": "#9a968e",
-        "opacity": 0.45
+        "color": "#b5afa5",
+        "opacity": 0.55
       },
       "encoding": {
         "tooltip": [
@@ -261,8 +261,8 @@
       ],
       "mark": {
         "type": "rule",
-        "color": "#1f2328",
-        "strokeWidth": 2
+        "color": "#5c6370",
+        "strokeWidth": 2.5
       },
       "encoding": {
         "x": {
@@ -287,7 +287,7 @@
       ],
       "mark": {
         "type": "line",
-        "color": "#b2182b",
+        "color": "#1f2328",
         "strokeWidth": 1.5,
         "opacity": 0.8
       }
@@ -302,9 +302,9 @@
       "mark": {
         "type": "circle",
         "size": 90,
-        "color": "#b2182b",
+        "color": "#1f2328",
         "opacity": 1,
-        "stroke": "#fcfcfb",
+        "stroke": "#f2eee6",
         "strokeWidth": 1.5
       },
       "encoding": {
@@ -340,8 +340,8 @@
         "dy": -10,
         "fontSize": 11,
         "fontWeight": 600,
-        "color": "#b2182b",
-        "stroke": "#fcfcfb",
+        "color": "#1f2328",
+        "stroke": "#f2eee6",
         "strokeWidth": 4,
         "strokeJoin": "round"
       },
@@ -365,11 +365,52 @@
         "dy": -10,
         "fontSize": 11,
         "fontWeight": 600,
-        "color": "#b2182b"
+        "color": "#1f2328"
       },
       "encoding": {
         "text": {
           "field": "country"
+        }
+      }
+    },
+    {
+      "description": "Annotation: warmest country in the 2020s (maximum value)",
+      "transform": [
+        {
+          "filter": "datum.decade == 2020"
+        },
+        {
+          "window": [
+            {
+              "op": "rank",
+              "as": "r"
+            }
+          ],
+          "sort": [
+            {
+              "field": "anomaly",
+              "order": "descending"
+            }
+          ]
+        },
+        {
+          "filter": "datum.r == 1"
+        },
+        {
+          "calculate": "'Warmest: ' + datum.country + ' ' + format(datum.anomaly, '+.1f') + '°C'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -8,
+        "fontSize": 10,
+        "color": "#5c6370"
+      },
+      "encoding": {
+        "text": {
+          "field": "lab"
         }
       }
     }

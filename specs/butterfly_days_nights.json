@@ -95,7 +95,7 @@
     {
       "title": {
         "text": "Daytime highs",
-        "color": "#d96d00",
+        "color": "#d98b00",
         "fontSize": 13,
         "anchor": "end",
         "font": "Inter, system-ui, sans-serif"
@@ -159,7 +159,7 @@
         {
           "mark": {
             "type": "bar",
-            "color": "#d96d00",
+            "color": "#d98b00",
             "cornerRadiusEnd": 3,
             "height": {
               "band": 0.7
@@ -227,7 +227,7 @@
     {
       "title": {
         "text": "Night-time lows",
-        "color": "#5e3c99",
+        "color": "#34344a",
         "fontSize": 13,
         "anchor": "start",
         "font": "Inter, system-ui, sans-serif"
@@ -290,7 +290,7 @@
         {
           "mark": {
             "type": "bar",
-            "color": "#5e3c99",
+            "color": "#34344a",
             "cornerRadiusEnd": 3,
             "height": {
               "band": 0.7

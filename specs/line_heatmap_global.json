@@ -93,7 +93,7 @@
             "fontSize": 11,
             "color": "#5c6370",
             "lineHeight": 14,
-            "stroke": "#fcfcfb",
+            "stroke": "#f2eee6",
             "strokeWidth": 4,
             "strokeJoin": "round"
           },
@@ -181,7 +181,7 @@
             "fontSize": 11,
             "fontWeight": 600,
             "color": "#1f2328",
-            "stroke": "#fcfcfb",
+            "stroke": "#f2eee6",
             "strokeWidth": 4,
             "strokeJoin": "round"
           },
@@ -244,7 +244,7 @@
           ],
           "mark": {
             "type": "line",
-            "color": "#b9b6af",
+            "color": "#b5afa5",
             "strokeWidth": 1.5
           },
           "encoding": {
@@ -285,7 +285,7 @@
           ],
           "mark": {
             "type": "line",
-            "color": "#b2182b",
+            "color": "#1f2328",
             "strokeWidth": 2.5
           },
           "encoding": {
@@ -348,19 +348,19 @@
               {
                 "field": "annual",
                 "type": "quantitative",
-                "title": "Anomaly (°C)",
+                "title": "Difference from 1951–1980 (°C)",
                 "format": "+.2f"
               },
               {
                 "field": "mean_10yr",
                 "type": "quantitative",
-                "title": "10-yr average (°C)",
+                "title": "Average of previous 10 years (°C)",
                 "format": "+.2f"
               },
               {
                 "field": "vs_1880_1900",
                 "type": "quantitative",
-                "title": "vs 1880–1900 (°C)",
+                "title": "Difference from 1880–1900 (°C)",
                 "format": "+.2f"
               }
             ]
@@ -379,7 +379,7 @@
             "baseline": "middle",
             "fontSize": 11,
             "fontWeight": 600,
-            "color": "#b2182b"
+            "color": "#1f2328"
           },
           "encoding": {
             "x": {
@@ -415,7 +415,7 @@
             "baseline": "middle",
             "fontSize": 11,
             "fontWeight": 400,
-            "color": "#8a867e"
+            "color": "#5c6370"
           },
           "encoding": {
             "x": {
@@ -515,22 +515,40 @@
         "color": {
           "field": "anomaly",
           "type": "quantitative",
-          "title": "Monthly anomaly (°C)",
+          "title": "Monthly difference from 1951–1980, °C",
           "scale": {
-            "scheme": "redblue",
-            "reverse": true,
             "domain": [
               -1.5,
+              -1.0,
+              -0.5,
+              0,
+              0.5,
+              1.0,
               1.5
             ],
-            "domainMid": 0,
+            "range": [
+              "#2166ac",
+              "#67a9cf",
+              "#d1e5f0",
+              "#ffffff",
+              "#fddbc7",
+              "#ef8a62",
+              "#b2182b"
+            ],
             "clamp": true
           },
           "legend": {
             "orient": "bottom",
             "direction": "horizontal",
-            "gradientLength": 220,
-            "format": "+.1f"
+            "gradientLength": 260,
+            "format": "+.1f",
+            "values": [
+              -1.5,
+              -0.75,
+              0,
+              0.75,
+              1.5
+            ]
           }
         },
         "tooltip": [

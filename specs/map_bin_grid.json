@@ -1,124 +1,118 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "MAP IDIOM 3 (bin map): decade-average temperature anomaly in 5° x 5° grid cells (Berkeley Earth). Cell squares come from be_grid_cells.geojson; values per decade from be_grid_decades.csv, joined on id.",
+  "description": "MAP IDIOM 3 (bin map): warming rate since 1980 in 5° x 5° grid cells (Berkeley Earth), land and ocean. Uses the same Equal Earth projection as the choropleth so the two can be compared fairly. Squares come from be_grid_cells.geojson; the rate (rate_recent) is a least-squares slope of annual means 1980–2025, computed in prep_data.R.",
   "title": {
-    "text": "Where the world has warmed, cell by cell",
-    "subtitle": ["Decade-average anomaly vs 1951–1980, °C · 5° grid", "Berkeley Earth · grey = too little data that decade"]
+    "text": "How fast each part of the world has warmed since 1980",
+    "subtitle": [
+      "Warming rate in 5° grid cells, °C per decade, 1980–2025",
+      "Berkeley Earth · land and ocean · grey = no data"
+    ]
   },
   "width": "container",
-  "height": 460,
+  "height": 420,
   "projection": {
-    "type": "equirectangular"
+    "type": "equalEarth"
   },
-  "params": [
-    {
-      "name": "decade",
-      "value": 2020,
-      "bind": {
-        "input": "range",
-        "min": 1900,
-        "max": 2020,
-        "step": 10,
-        "name": "Decade "
-      }
-    }
-  ],
   "layer": [
     {
-      "description": "Light grey globe = no data for that cell and decade",
+      "description": "Grey globe = cells with no data",
       "data": {
         "sphere": true
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#e8e6e1",
+        "fill": "#d3cdc2",
         "stroke": null
       }
     },
     {
-      "description": "One 5° square per grid cell, coloured by its decade-average anomaly",
+      "description": "One square per 5° cell, coloured by its warming rate",
       "data": {
-        "url": "data/be_grid_decades.csv"
+        "url": "data/be_grid_cells.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
       },
       "transform": [
         {
-          "filter": "datum.decade == decade"
+          "filter": "isValid(datum.properties.rate_recent)"
         },
         {
-          "lookup": "id",
-          "from": {
-            "data": {
-              "url": "data/be_grid_cells.geojson",
-              "format": {
-                "type": "json",
-                "property": "features"
-              }
-            },
-            "key": "properties.id"
-          },
-          "as": "geo"
+          "calculate": "datum.properties.rate_recent",
+          "as": "rate"
         },
         {
-          "filter": "datum.geo != null"
-        },
-        {
-          "calculate": "decade == 2020 ? '2020–2025' : decade + 's'",
-          "as": "decade_label"
-        },
-        {
-          "calculate": "datum.geo.properties.land >= 0.5 ? 'Mostly land' : 'Mostly ocean'",
+          "calculate": "datum.properties.land >= 0.5 ? 'Mostly land' : 'Mostly ocean'",
           "as": "surface"
+        },
+        {
+          "calculate": "datum.properties.change",
+          "as": "change"
         }
       ],
       "mark": {
         "type": "geoshape",
-        "stroke": "#fcfcfb",
-        "strokeWidth": 0.3
+        "stroke": "#f2eee6",
+        "strokeWidth": 0.25
       },
       "encoding": {
-        "shape": {
-          "field": "geo",
-          "type": "geojson"
-        },
         "color": {
-          "field": "anomaly",
+          "field": "rate",
           "type": "quantitative",
-          "title": "Anomaly (°C)",
+          "title": "Warming rate, °C per decade (1980–2025)",
           "scale": {
-            "scheme": "redblue",
-            "reverse": true,
             "domain": [
-              -2,
-              4
+              -0.5,
+              -0.333,
+              -0.167,
+              0,
+              0.5,
+              1.0,
+              1.5
             ],
-            "domainMid": 0,
+            "range": [
+              "#2166ac",
+              "#67a9cf",
+              "#d1e5f0",
+              "#ffffff",
+              "#fddbc7",
+              "#ef8a62",
+              "#b2182b"
+            ],
             "clamp": true
           },
           "legend": {
-            "orient": "right",
-            "format": "+.0f",
-            "gradientLength": 220
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 260,
+            "format": "+.1f",
+            "offset": 16,
+            "titlePadding": 6,
+            "values": [
+              -0.5,
+              0,
+              0.5,
+              1,
+              1.5
+            ]
           }
         },
         "tooltip": [
           {
-            "field": "decade_label",
-            "title": "Decade"
-          },
-          {
             "field": "surface",
-            "title": "Surface"
+            "title": "Grid cell"
           },
           {
-            "field": "anomaly",
+            "field": "rate",
             "type": "quantitative",
-            "title": "Anomaly (°C)",
+            "title": "Warming rate since 1980 (°C per decade)",
             "format": "+.2f"
           },
           {
-            "field": "geo.properties.rate_recent",
+            "field": "change",
             "type": "quantitative",
-            "title": "Rate 1980–2025 (°C/decade)",
+            "title": "1996–2025 vs 1951–1980 (°C)",
             "format": "+.2f"
           }
         ]
@@ -138,7 +132,155 @@
         "fill": null,
         "stroke": "#1f2328",
         "strokeWidth": 0.6,
-        "strokeOpacity": 0.6
+        "strokeOpacity": 0.55
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 68,
+            "lat": 79
+          }
+        ]
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "Barents and Kara Seas:",
+            "up to +1.5°C per decade"
+          ]
+        }
+      },
+      "description": "Annotation: fastest-warming cells (halo)",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "stroke": "#f2eee6",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 68,
+            "lat": 79
+          }
+        ]
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "Barents and Kara Seas:",
+            "up to +1.5°C per decade"
+          ]
+        }
+      },
+      "description": "Annotation: fastest-warming cells",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "color": "#1f2328"
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": -150,
+            "lat": -63
+          }
+        ]
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "Southern Ocean:",
+            "little change"
+          ]
+        }
+      },
+      "description": "Annotation: slowest cells (halo)",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "stroke": "#f2eee6",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": -150,
+            "lat": -63
+          }
+        ]
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "Southern Ocean:",
+            "little change"
+          ]
+        }
+      },
+      "description": "Annotation: slowest cells",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "color": "#1f2328"
       }
     }
   ]

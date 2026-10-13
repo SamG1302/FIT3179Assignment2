@@ -112,7 +112,7 @@
       "description": "Bar of the dumbbell: from the old rate to the new rate",
       "mark": {
         "type": "rule",
-        "color": "#7d7a73",
+        "color": "#9a958c",
         "strokeWidth": 2
       },
       "encoding": {
@@ -170,7 +170,7 @@
         "type": "circle",
         "size": 90,
         "opacity": 1,
-        "stroke": "#fcfcfb",
+        "stroke": "#f2eee6",
         "strokeWidth": 1
       },
       "encoding": {
@@ -188,8 +188,8 @@
               "1980–2025"
             ],
             "range": [
-              "#7d7a73",
-              "#b2182b"
+              "#9a958c",
+              "#5e3c99"
             ]
           },
           "legend": {
@@ -205,19 +205,19 @@
           {
             "field": "rate_early",
             "type": "quantitative",
-            "title": "1950–1979 (°C/decade)",
+            "title": "Warming per decade, 1950–1979 (°C)",
             "format": "+.2f"
           },
           {
             "field": "rate_recent",
             "type": "quantitative",
-            "title": "1980–2025 (°C/decade)",
+            "title": "Warming per decade, 1980–2025 (°C)",
             "format": "+.2f"
           },
           {
             "field": "acceleration",
             "type": "quantitative",
-            "title": "Change in rate",
+            "title": "Change in rate (°C per decade)",
             "format": "+.2f"
           }
         ]

@@ -1,16 +1,15 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "MAP IDIOM 2 (proportional symbol): one circle per country at its inner point. Circle area = warming rate since 1980; colour = whether warming is faster or slower than in 1950–1979 (OWID / ERA5, from owid_country_summary.csv). Click the legend to filter.",
+  "description": "MAP IDIOM 2 (proportional symbol): how much each country's warming rate changed between 1950–1979 and 1980–2025 (OWID / ERA5, owid_country_summary.csv). Circle area = size of the change; dark purple = warming sped up, light purple = warming slowed. Purple is used for rates of change only, never for temperature. Click the legend to show one group.",
   "title": {
-    "text": "How fast each country is warming",
+    "text": "Where warming has sped up the most",
     "subtitle": [
-      "Circle area = warming rate 1980–2025, °C per decade",
-      "Colour = faster or slower than 1950–1979",
-      "Our World in Data (ERA5)"
+      "Change in warming rate, 1980–2025 vs 1950–1979, °C per decade",
+      "Our World in Data (ERA5) · one circle per country"
     ]
   },
   "width": "container",
-  "height": 360,
+  "height": 420,
   "projection": {
     "type": "equalEarth"
   },
@@ -21,7 +20,7 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#eef3f6",
+        "fill": "#e6eaec",
         "stroke": null
       }
     },
@@ -35,8 +34,8 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#dedbd5",
-        "stroke": "#fcfcfb",
+        "fill": "#dcd7cd",
+        "stroke": "#f2eee6",
         "strokeWidth": 0.5
       }
     },
@@ -60,11 +59,15 @@
           }
         },
         {
-          "filter": "isValid(datum.lon) && isValid(datum.rate_recent)"
+          "filter": "isValid(datum.lon) && isValid(datum.acceleration)"
         },
         {
-          "calculate": "datum.acceleration > 0 ? 'Faster than 1950–79' : 'Slower than 1950–79'",
+          "calculate": "datum.acceleration > 0 ? 'Sped up' : 'Slowed down'",
           "as": "trend"
+        },
+        {
+          "calculate": "abs(datum.acceleration)",
+          "as": "size_value"
         }
       ],
       "params": [
@@ -81,8 +84,8 @@
       ],
       "mark": {
         "type": "circle",
-        "stroke": "#fcfcfb",
-        "strokeWidth": 1
+        "stroke": "#f2eee6",
+        "strokeWidth": 0.8
       },
       "encoding": {
         "longitude": {
@@ -94,18 +97,18 @@
           "type": "quantitative"
         },
         "size": {
-          "field": "rate_recent",
+          "field": "size_value",
           "type": "quantitative",
-          "title": "°C per decade (1980–2025)",
+          "title": "Size of change, °C per decade",
           "scale": {
             "type": "sqrt",
             "domain": [
               0,
-              0.7
+              0.8
             ],
             "range": [
-              0,
-              500
+              4,
+              420
             ]
           },
           "legend": {
@@ -113,47 +116,46 @@
             "direction": "horizontal",
             "values": [
               0.1,
-              0.3,
-              0.6
+              0.4,
+              0.8
             ],
             "format": ".1f",
-            "symbolFillColor": "#9a968e",
-            "symbolStrokeColor": "#fcfcfb",
-            "offset": 20,
-            "titlePadding": 6,
-            "labelOffset": 6
+            "symbolFillColor": "#8a8494",
+            "symbolStrokeColor": "#f2eee6",
+            "offset": 16,
+            "titlePadding": 6
           }
         },
         "color": {
           "field": "trend",
           "type": "nominal",
-          "title": "Warming now is…",
+          "title": "Warming has…",
           "scale": {
             "domain": [
-              "Faster than 1950–79",
-              "Slower than 1950–79"
+              "Sped up",
+              "Slowed down"
             ],
             "range": [
-              "#b2182b",
-              "#4393c3"
+              "#5e3c99",
+              "#b9a8d9"
             ]
           },
           "legend": {
             "orient": "bottom",
             "direction": "horizontal",
-            "offset": 20,
+            "offset": 16,
             "titlePadding": 6
           }
         },
         "opacity": {
           "condition": {
             "param": "trend_pick",
-            "value": 0.85
+            "value": 0.72
           },
-          "value": 0.08
+          "value": 0.06
         },
         "order": {
-          "field": "rate_recent",
+          "field": "size_value",
           "sort": "descending"
         },
         "tooltip": [
@@ -164,28 +166,96 @@
           {
             "field": "rate_early",
             "type": "quantitative",
-            "title": "Rate 1950–1979 (°C/decade)",
+            "title": "Warming per decade, 1950–1979 (°C)",
             "format": "+.2f"
           },
           {
             "field": "rate_recent",
             "type": "quantitative",
-            "title": "Rate 1980–2025 (°C/decade)",
+            "title": "Warming per decade, 1980–2025 (°C)",
             "format": "+.2f"
           },
           {
             "field": "acceleration",
             "type": "quantitative",
-            "title": "Change in rate",
-            "format": "+.2f"
-          },
-          {
-            "field": "change",
-            "type": "quantitative",
-            "title": "Warmer than 1951–1980 by (°C)",
+            "title": "Change in rate (°C per decade)",
             "format": "+.2f"
           }
         ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": -30,
+            "lat": 58
+          }
+        ]
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "Europe and the Middle East:",
+            "largest speed-ups"
+          ]
+        }
+      },
+      "description": "Annotation: cluster of large purple circles (halo)",
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "stroke": "#f2eee6",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": -30,
+            "lat": 58
+          }
+        ]
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "Europe and the Middle East:",
+            "largest speed-ups"
+          ]
+        }
+      },
+      "description": "Annotation: cluster of large purple circles",
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "color": "#1f2328"
       }
     }
   ]

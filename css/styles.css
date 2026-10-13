@@ -513,3 +513,81 @@ p {
     font-size: 2.1rem;
   }
 }
+
+/* =========================================================================
+   Feedback studio revisions
+   ========================================================================= */
+
+/* Not a white page: a warm paper colour with an even darker frame. Charts
+   use white for "no change", so they stay distinct from the page. */
+:root {
+  --bg: #e7e2d8;
+  --surface: #f2eee6;
+  --tint: #e8e3d9;
+  --rule: #d6d0c4;
+  --section-gap: 48px;
+}
+
+body { background-color: var(--bg); }
+.page { background-color: var(--surface); padding-top: 44px; }
+
+/* Smaller headings (they were competing with the charts) */
+h1 { font-size: 2.3rem; }
+h2 { font-size: 1.5rem; }
+
+/* Numbers in a sans-serif face; serif stays for headings only */
+.stat-number,
+.key-number,
+.key-list dt {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.stat-number,
+.key-number { font-size: 2.3rem; }
+
+/* Less empty space between and inside parts */
+.part { padding-top: 32px; }
+.part-head { margin-bottom: 20px; }
+.figure { margin-bottom: 32px; }
+.hero { padding-bottom: 28px; }
+
+/* Highlighted words in body text */
+.section-intro strong,
+.lede strong,
+.caption strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Colour key swatches in the reading guide */
+.swatch-nodata { background: #d3cdc2; }
+.swatch-rate   { background: #5e3c99; }
+.swatch-cool   { background: #2166ac; }
+.swatch-warm   { background: #b2182b; }
+.swatch { border: 1px solid rgba(0,0,0,0.12); margin-left: 2px; }
+
+/* Charts must never be cut off: let wide canvases scale down */
+.vis-container canvas { max-width: 100%; }
+
+@media (max-width: 767px) {
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.3rem; }
+  .stat-number, .key-number { font-size: 1.9rem; }
+}
+
+/* Keep every line at or under 12 words (feedback studio), measured in the browser */
+p,
+.part-head .col p {
+  max-width: 45ch;
+}
+
+.caption,
+.reading-guide .col p,
+.site-footer .col p {
+  max-width: 46ch;
+}
+
+.lede { max-width: 44ch; }
+.key-label { max-width: 32ch; }

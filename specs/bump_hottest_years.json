@@ -4,8 +4,9 @@
   "title": {
     "text": "The 10 hottest years on record, as the record grew",
     "subtitle": [
-      "Rank among all years up to that point, every 5 years · NASA GISTEMP v4",
-      "Darker red = more recent year"
+      "Rank among all years up to that point, every 5 years",
+      "A hotter new year pushes older years down the list",
+      "Dark lines = years since 2015 · NASA GISTEMP v4"
     ]
   },
   "width": "container",
@@ -70,20 +71,11 @@
       "type": "nominal"
     },
     "color": {
-      "field": "year",
-      "type": "quantitative",
-      "title": "Year",
-      "scale": {
-        "domain": [
-          1940,
-          2025
-        ],
-        "range": [
-          "#e7e1d8",
-          "#b2182b"
-        ]
+      "condition": {
+        "test": "datum.year >= 2015",
+        "value": "#1f2328"
       },
-      "legend": null
+      "value": "#b5afa5"
     },
     "opacity": {
       "condition": {
@@ -101,18 +93,18 @@
       {
         "field": "rank",
         "type": "quantitative",
-        "title": "Rank"
+        "title": "Rank (1 = hottest)"
       },
       {
         "field": "as_of",
         "type": "quantitative",
-        "title": "As of",
+        "title": "Ranking made in",
         "format": "d"
       },
       {
         "field": "annual",
         "type": "quantitative",
-        "title": "Anomaly (°C)",
+        "title": "Difference from 1951–1980 (°C)",
         "format": "+.2f"
       }
     ]

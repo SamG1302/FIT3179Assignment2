@@ -23,7 +23,7 @@
 
   <!-- Your styles (loaded last so they override Pure.css) -->
   <!-- "?v=..." makes browsers fetch the new file after each update: bump the number whenever you change it -->
-  <link rel="stylesheet" href="css/styles.css?v=9">
+  <link rel="stylesheet" href="css/styles.css?v=10">
 </head>
 
 <body>
@@ -37,7 +37,7 @@
           <h1>The world is warming, and faster than it used to</h1>
           <p class="byline">By Samuel Gunawan</p>
           <p class="lede">
-            Every year since 1977 has been warmer than the 1951–1980 global average. Anyone born
+            <strong>Every year since 1977</strong> has been warmer than the 1951–1980 global average. Anyone born
             since then has never lived through a year cooler than the average their grandparents
             grew up with. This page follows that change from 1880 to 2025, around the world and in
             Australia.
@@ -70,9 +70,11 @@
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col">
         <p>
-          <span class="swatch swatch-warm"></span>Red means warmer than the average and
-          <span class="swatch swatch-cool"></span>blue means cooler. Grey marks places or periods
-          with no data. Hover over any chart for exact values.
+          <span class="swatch swatch-warm"></span><strong>Red</strong> means warmer than the average,
+          <span class="swatch swatch-cool"></span><strong>blue</strong> cooler and white no change.
+          <span class="swatch swatch-nodata"></span>Grey means no data.
+          <span class="swatch swatch-rate"></span><strong>Purple</strong> shows how fast warming is changing, not
+          temperature itself. Hover over any chart for exact values.
         </p>
         </div>
         </div>
@@ -86,14 +88,10 @@
             <p class="part-label">Part 1 · The long view</p>
             <h2>The world is about 1.3°C warmer than a century ago</h2>
             <p class="section-intro">
-              Until the 1970s, global temperature rose and fell by a few tenths of a degree, including a
-              temporary warm spell around the 1940s. From the late 1970s it began a steady climb, and the
-              10-year average has risen by about 0.2°C every decade since. The 2016–2025 average was
-              1.3°C above the 1901–1930 average.
+              Until the 1970s, global temperature rose and fell by a few tenths of a degree, including a temporary warm spell around the 1940s. From the late 1970s it began a <strong>steady climb</strong>, and the 10-year average has risen by about <strong>0.2°C every decade</strong> since.
             </p>
             <p class="section-intro">
-              The heatmap below the line breaks each year into its 12 months. The shift from blue to red
-              happens in every month at about the same time, so the change covers the whole year.
+              The heatmap below the line splits each year into its 12 months. The change from blue to red happens in <strong>every month</strong> at about the same time, so the warming covers the whole year, not just summer.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col col-aside">
@@ -104,12 +102,11 @@
           </aside>
         </div>
       </div>
+
       <figure class="figure">
         <div id="vis-global-trend" class="vis-container"></div>
         <figcaption class="caption">
-          <span class="idiom-tag">Line chart + heatmap</span>
-          Hover the line to read a year. Drag across it to zoom the heatmap to those years; click
-          outside the shaded area to reset.
+          <strong>How to read:</strong> each year is compared with the 1951–1980 average (dashed zero line). Hover the line to read a year. Drag across it to zoom the heatmap; click outside the shaded area to reset.
         </figcaption>
       </figure>
     </section>
@@ -121,14 +118,10 @@
             <p class="part-label">Part 2 · The pace of change</p>
             <h2>Warming has sped up since 1980</h2>
             <p class="section-intro">
-              Between 1880 and 1939 the world warmed by about 0.01°C per decade. Over 1980–2025 the rate
-              was 0.21°C per decade, and since 2010 it has been about 0.36°C. The left chart shows this
-              decade by decade: since the 1960s, each decade has been warmer than the one before.
+              Between 1880 and 1939 the world warmed by about <strong>0.01°C per decade</strong>. Over 1980–2025 the rate was <strong>0.21°C per decade</strong>, and since 2010 it has been about <strong>0.36°C</strong>. Since the 1960s, every decade has been warmer than the one before.
             </p>
             <p class="section-intro">
-              The right chart tracks the ten warmest years on record as the record grew. Older years drop
-              out as newer, hotter ones arrive. By 2025, every year in the top ten falls between 2015 and
-              2025.
+              The ranking chart shows the ten warmest years on record, re-ranked every five years. As each new record arrives, older years drop down and out. By 2025, <strong>all ten</strong> of the warmest years fall between 2015 and 2025.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col col-aside">
@@ -139,14 +132,13 @@
           </aside>
         </div>
       </div>
+
       <div class="pure-g row-2">
         <div class="pure-u-1 pure-u-md-1-2 col">
           <figure class="figure">
             <div id="vis-decade-rate" class="vis-container"></div>
             <figcaption class="caption">
-              <span class="idiom-tag">Lollipop chart</span>
-              Red stems are decades that were warmer than the one before; blue stems were cooler.
-              Hover a dot for the exact change.
+              <strong>How to read:</strong> each dot shows how much warmer (red) or cooler (blue) a decade was than the decade before. Hover a dot for the exact change.
             </figcaption>
           </figure>
         </div>
@@ -154,9 +146,7 @@
           <figure class="figure">
             <div id="vis-hottest-years" class="vis-container"></div>
             <figcaption class="caption">
-              <span class="idiom-tag">Bump chart</span>
-              Each line is one year; darker red lines are more recent years. Click a line to follow it,
-              and double-click to reset.
+              <strong>How to read:</strong> each line follows one year through the top-ten list. Dark lines show 2015–2025. Click a line to highlight it; double-click to reset.
             </figcaption>
           </figure>
         </div>
@@ -168,16 +158,12 @@
       <div class="pure-g row-2 part-head">
         <div class="pure-u-1 pure-u-md-1-2 col">
             <p class="part-label">Part 3 · Around the world</p>
-            <h2>Every country is warmer, and the far north most of all</h2>
+            <h2>Every country is warmer, and the far north is warming fastest</h2>
             <p class="section-intro">
-              All 194 countries in the data were warmer in 1996–2025 than in 1951–1980. The typical
-              country warmed by about 1.1°C. Australia warmed by 0.43°C, less than most, while Malaysia
-              warmed by 1.07°C, close to the typical amount.
+              The first map shows how much warmer each country was in a chosen year than its own 1951–1980 average. In <strong>2025, all 194 countries</strong> were warmer; Australia by <strong>0.83°C</strong> and Malaysia by <strong>1.28°C</strong>. Each colour is a national average, so it hides differences within large countries such as Australia.
             </p>
             <p class="section-intro">
-              Countries are uneven units, so the second map uses equal 5° grid squares that also cover the
-              oceans. It shows the Arctic (north of 60°N) warming at about 0.56°C per decade since 1980,
-              almost three times the global rate of 0.21°C.
+              The second map shows something different: <strong>how fast</strong> each 5° square of land and ocean has warmed since 1980. The <strong>Arctic</strong> (north of 60°N) is warming at about 0.56°C per decade, almost three times the global 0.21°C, while parts of the Southern Ocean have barely changed.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col col-aside">
@@ -188,20 +174,18 @@
           </aside>
         </div>
       </div>
+
       <figure class="figure">
         <div id="vis-map-choropleth" class="vis-container"></div>
         <figcaption class="caption">
-          <span class="idiom-tag">Choropleth map</span>
-          Drag the slider from 1940 to 2025 and watch the map turn from mixed blue and red to almost
-          entirely red. Hover a country for its value.
+          <strong>How to read:</strong> red countries were warmer than their 1951–1980 average in that year, blue ones cooler. Drag the slider from 1940 to 2025 and watch the map turn red. Hover a country for its value.
         </figcaption>
       </figure>
+
       <figure class="figure">
         <div id="vis-map-grid" class="vis-container"></div>
         <figcaption class="caption">
-          <span class="idiom-tag">Bin map (5° grid)</span>
-          Compare the top rows (the Arctic) with the tropics. Drag the slider from the 1900s to the
-          2020s; grey squares had too few measurements in that decade.
+          <strong>How to read:</strong> every square represents a 5-degree area of land or ocean. Darker red squares warmed faster since 1980. Both maps use the same Equal Earth projection, so areas near the poles are not stretched.
         </figcaption>
       </figure>
     </section>
@@ -211,17 +195,12 @@
       <div class="pure-g row-2 part-head">
         <div class="pure-u-1 pure-u-md-1-2 col">
             <p class="part-label">Part 4 · Country by country</p>
-            <h2>Most countries are warming faster than before</h2>
+            <h2>Warming has sped up in most countries</h2>
             <p class="section-intro">
-              The map compares each country's warming rate since 1980 with its rate in 1950–1979. In 168
-              of 194 countries the rate has increased. Australia changed from a slight cooling of 0.20°C
-              per decade to a warming of 0.13°C per decade.
+              The circles compare each country's warming rate in 1980–2025 with its rate in 1950–1979. A bigger circle means a bigger change. Warming <strong>sped up in 168 of 194 countries</strong>, most of all in <strong>Europe and the Middle East</strong>. Australia went from a slight cooling (−0.20°C per decade) to warming (+0.13°C per decade).
             </p>
             <p class="section-intro">
-              The two charts below give the detail. The jitter plot places every country in every decade,
-              so you can see the whole spread move upward. The dumbbell chart compares the two rates for 19
-              countries. Russia's rate rose the most of these; India and New Zealand are the two that
-              slowed slightly.
+              The two charts below add detail. The jitter plot places every country in every decade, so you can watch the whole group move upward. The dumbbell chart compares the two rates for 19 countries; India and New Zealand are the only two of these that slowed slightly.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col col-aside">
@@ -232,22 +211,20 @@
           </aside>
         </div>
       </div>
+
       <figure class="figure">
         <div id="vis-map-symbols" class="vis-container"></div>
         <figcaption class="caption">
-          <span class="idiom-tag">Proportional symbol map</span>
-          Larger circles are warming faster now. Click "Faster" or "Slower" in the legend to show only
-          that group.
+          <strong>How to read:</strong> circle size shows how much a country's warming rate changed. Dark purple means warming sped up; light purple means it slowed. Purple is used only for rates of change, never for temperature. Click a legend entry to show one group.
         </figcaption>
       </figure>
+
       <div class="pure-g row-2">
         <div class="pure-u-1 pure-u-md-1-2 col">
           <figure class="figure">
             <div id="vis-jitter" class="vis-container"></div>
             <figcaption class="caption">
-              <span class="idiom-tag">Jitter plot</span>
-              Each grey dot is one country in one decade; the black dash is the median country. Choose
-              a country from the list to trace its path.
+              <strong>How to read:</strong> each grey dot is one country in one decade, and the grey dash is the middle country. Pick a country from the list to trace its path; Australia is shown first.
             </figcaption>
           </figure>
         </div>
@@ -255,9 +232,7 @@
           <figure class="figure">
             <div id="vis-dumbbell" class="vis-container"></div>
             <figcaption class="caption">
-              <span class="idiom-tag">Dumbbell chart</span>
-              The longer the bar, the more a country's warming rate changed. Australia and Malaysia are
-              shaded. Hover a row for both rates.
+              <strong>How to read:</strong> the grey dot is a country's warming rate in 1950–1979 and the purple dot its rate in 1980–2025. A longer bar means a bigger change. Australia and Malaysia are shaded.
             </figcaption>
           </figure>
         </div>
@@ -271,15 +246,10 @@
             <p class="part-label">Part 5 · Australia</p>
             <h2>Australia: spring and summer have warmed most</h2>
             <p class="section-intro">
-              Comparing 2000–2025 with 1951–1980, Australian spring (September to November) warmed by
-              0.66°C and summer (December to February) by 0.54°C. Winter warmed by 0.40°C and autumn by
-              0.18°C, so the warming is uneven across the year.
+              Comparing 2000–2025 with 1951–1980, Australian <strong>spring</strong> (September to November) warmed by <strong>0.66°C</strong> and <strong>summer</strong> (December to February) by <strong>0.54°C</strong>. Winter warmed by 0.40°C and autumn by only 0.18°C.
             </p>
             <p class="section-intro">
-              The circular chart shows the same months decade by decade, with the 1940s at the centre and
-              the 2020s on the outside edge. The outer ring is the reddest, and August and September in
-              the 2020s have averaged 1.2 to 1.3°C above their 1951–1980 level. Australia's warmest year
-              in this data was 2019.
+              The circular chart shows each month, decade by decade. The outer ring (the 2020s) is the reddest: <strong>August and September</strong> in the 2020s averaged 1.2 to 1.3°C above their 1951–1980 level. Australia's warmest year in this data was <strong>2019</strong>.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col col-aside">
@@ -290,14 +260,13 @@
           </aside>
         </div>
       </div>
+
       <div class="pure-g row-2">
         <div class="pure-u-1 pure-u-md-1-2 col">
           <figure class="figure">
             <div id="vis-slope" class="vis-container"></div>
             <figcaption class="caption">
-              <span class="idiom-tag">Slope chart</span>
-              Each line starts at that season's 1951–1980 average, so a steeper, darker line means more
-              warming. Hover a point for its value.
+              <strong>How to read:</strong> every season starts at its own 1951–1980 average (0). The higher a line ends, the more that season has warmed. Hover a point for its value.
             </figcaption>
           </figure>
         </div>
@@ -305,9 +274,7 @@
           <figure class="figure">
             <div id="vis-radial" class="vis-container vis-fixed"></div>
             <figcaption class="caption">
-              <span class="idiom-tag">Radial heatmap</span>
-              Read clockwise from January at the top, and outward from the 1940s to the 2020s. Hover a
-              cell for the month, decade and value.
+              <strong>How to read:</strong> months run clockwise from January at the top, like a clock. Rings move outward from the 1940s (centre) to the 2020s (edge). Hover a cell for the month, decade and value.
             </figcaption>
           </figure>
         </div>
@@ -321,11 +288,10 @@
             <p class="part-label">Part 6 · Day and night</p>
             <h2>Nights warmed first, then days caught up</h2>
             <p class="section-intro">
-              Over global land, night-time lows started rising earlier than daytime highs. By the 1980s,
-              nights were 0.52°C warmer than in the 1950s while days were only 0.22°C warmer. Daytime
-              highs then rose faster, and by 2010–2015 both were about 1.0°C above their 1950s level.
-              Warmer nights matter for health, because they give the body less chance to recover after a
-              hot day. This dataset ends in 2015.
+              Over global land, <strong>night-time lows</strong> started rising earlier than daytime highs. By the 1980s, nights were 0.52°C warmer than in the 1950s, while days were only 0.22°C warmer.
+            </p>
+            <p class="section-intro">
+              Daytime highs then rose faster, and by 2010–2015 <strong>both were about 1.0°C</strong> above their 1950s level. Warmer nights matter for health, because the body has less chance to recover after a hot day. This dataset ends in 2015.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col col-aside">
@@ -336,12 +302,11 @@
           </aside>
         </div>
       </div>
+
       <figure class="figure">
         <div id="vis-butterfly" class="vis-container"></div>
         <figcaption class="caption">
-          <span class="idiom-tag">Butterfly chart</span>
-          Daytime highs extend to the left and night-time lows to the right, with the decade in the
-          middle. Hover a bar to compare the two.
+          <strong>How to read:</strong> daytime highs (amber) extend left and night-time lows (dark slate) extend right, with the decade in the middle. Both sides use the same scale: °C warmer than the 1950s. Hover a bar to compare.
         </figcaption>
       </figure>
     </section>
@@ -353,19 +318,10 @@
             <p class="part-label">Conclusion</p>
             <h2>What the data shows</h2>
             <p class="section-intro">
-              The world is about 1.3°C warmer than in the early 1900s, and most of that rise has happened
-              since 1980. Separate records agree on this: NASA's global series matches both the Copernicus
-              ERA5 data and Berkeley Earth's grid closely (a correlation of 0.99 in each case).
+              The world is about <strong>1.3°C warmer</strong> than in the early 1900s, and most of that rise has happened since 1980. Separate records agree: NASA's global series matches both the Copernicus ERA5 data and Berkeley Earth's grid closely, with a correlation of 0.99 in each case.
             </p>
             <p class="section-intro">
-              The rate of warming has also increased. It was close to zero before 1940, about 0.2°C per
-              decade after 1980, and higher again since 2010. Most countries show the same increase, and
-              the Arctic is warming fastest.
-            </p>
-            <p class="section-intro">
-              Australia has warmed less than the global average, but its springs and summers have warmed
-              noticeably, and four of its five warmest years have come since 2013. If the post-1980 rate
-              continues, each coming decade will add roughly another 0.2°C to the global figure.
+              Warming has also <strong>sped up</strong>: close to zero before 1940, about 0.2°C per decade after 1980, and higher again since 2010. Australia has warmed less than the global average, but its springs and summers have warmed noticeably, and <strong>four of its five warmest years</strong> have come since 2013.
             </p>
         </div>
         <div class="pure-u-1 pure-u-md-1-2 col col-aside">
@@ -413,7 +369,7 @@
   </div> <!-- end .page -->
 
   <!-- Embeds every chart. Edit this file to add or remove visualisations. -->
-  <script src="js/main.js?v=9"></script>
+  <script src="js/main.js?v=10"></script>
 </body>
 
 </html>

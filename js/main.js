@@ -48,6 +48,8 @@ const THEME = {
     tickColor: "#b9b6af"
   },
   legend: {
+    titleLimit: 420,                      // never cut legend titles short
+    labelLimit: 300,
     labelColor: "#5c6370",
     titleColor: "#1f2328",
     labelFontSize: 11,
