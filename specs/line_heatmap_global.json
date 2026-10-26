@@ -1,17 +1,25 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Overview + detail (NASA GISTEMP v4). Top: global annual anomaly with the trailing 10-year mean; drag across it to brush a period. Bottom: month x year heatmap that zooms to the brushed years. Both views are in one spec so the brush can link them.",
+  "description": "Overview + detail (NASA GISTEMP v4). Top: global annual anomaly with the trailing 10-year mean; drag across it to brush a period. Bottom: month x year heatmap that zooms to the brushed years. Both views are in one spec so the brush can link them. Numbers in square brackets in the notes refer to the References list in the page footer.",
   "usermeta": {
     "responsive": {
       "layout": "vconcat",
-      "reserve": 84
+      "reserve": 84,
+      "hideBelow": 760,
+      "hideLayers": [
+        "Annotation",
+        "Note",
+        "Leader",
+        "Bracket",
+        "Event markers"
+      ]
     }
   },
   "title": {
-    "text": "Global temperature anomaly, 1880–2025",
+    "text": "Warming took off after the 1970s",
     "subtitle": [
-      "Difference from the 1951–1980 average, °C · NASA GISTEMP v4",
-      "Drag across the line chart to zoom the heatmap below"
+      "Global temperature, difference from the 1951–1980 average, °C",
+      "NASA GISTEMP v4"
     ]
   },
   "spacing": 28,
@@ -52,6 +60,81 @@
               "datum": 0,
               "type": "quantitative"
             }
+          }
+        },
+        {
+          "description": "Annotation: label for the dashed zero line (halo)",
+          "mark": {
+            "type": "text",
+            "fontSize": 11,
+            "color": "#5c6370",
+            "align": "right",
+            "baseline": "top",
+            "dy": 7,
+            "stroke": "#f2eee6",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "x": {
+              "datum": 2024,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 0,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "Dashed line: 1951–1980 average"
+            }
+          },
+          "data": {
+            "values": [
+              {}
+            ]
+          }
+        },
+        {
+          "description": "Annotation: label for the dashed zero line",
+          "mark": {
+            "type": "text",
+            "fontSize": 11,
+            "color": "#5c6370",
+            "align": "right",
+            "baseline": "top",
+            "dy": 7
+          },
+          "encoding": {
+            "x": {
+              "datum": 2024,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 0,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "Dashed line: 1951–1980 average"
+            }
+          },
+          "data": {
+            "values": [
+              {}
+            ]
           }
         },
         {
@@ -176,14 +259,15 @@
           "mark": {
             "type": "text",
             "align": "right",
-            "dx": -8,
-            "dy": 2,
+            "dx": -9,
+            "dy": 0,
             "fontSize": 11,
             "fontWeight": 600,
             "color": "#1f2328",
             "stroke": "#f2eee6",
             "strokeWidth": 4,
-            "strokeJoin": "round"
+            "strokeJoin": "round",
+            "baseline": "middle"
           },
           "encoding": {
             "x": {
@@ -209,11 +293,12 @@
           "mark": {
             "type": "text",
             "align": "right",
-            "dx": -8,
-            "dy": 2,
+            "dx": -9,
+            "dy": 0,
             "fontSize": 11,
             "fontWeight": 600,
-            "color": "#1f2328"
+            "color": "#1f2328",
+            "baseline": "middle"
           },
           "encoding": {
             "x": {
@@ -272,6 +357,13 @@
               "axis": {
                 "format": "+.1f",
                 "minExtent": 52
+              },
+              "scale": {
+                "domain": [
+                  -0.7,
+                  1.45
+                ],
+                "nice": false
               }
             }
           }
@@ -295,6 +387,540 @@
             },
             "y": {
               "field": "mean_10yr",
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "description": "Event markers: rings on the years the notes refer to (Pinatubo dip, El Niño peaks)",
+          "data": {
+            "url": "data/gistemp_global.csv",
+            "format": {
+              "type": "csv",
+              "parse": {
+                "year": "number",
+                "annual": "number",
+                "mean_10yr": "number",
+                "vs_1880_1900": "number"
+              }
+            }
+          },
+          "transform": [
+            {
+              "filter": "indexof([1992, 1998, 2016], datum.year) >= 0"
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "shape": "circle",
+            "size": 70,
+            "filled": false,
+            "stroke": "#1f2328",
+            "strokeWidth": 1.3
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "annual",
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "description": "Leader line from the 1992 dip to its note",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#5c6370",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "datum": 1992,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 0.15,
+              "type": "quantitative"
+            },
+            "x2": {
+              "datum": 1992
+            },
+            "y2": {
+              "datum": -0.33
+            }
+          }
+        },
+        {
+          "description": "Note: Pinatubo (halo)",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370",
+            "stroke": "#f2eee6",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1992,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": -0.36,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "1991: Mount Pinatubo erupts.",
+                "Its haze cools 1992 [5]"
+              ]
+            }
+          }
+        },
+        {
+          "description": "Note: Pinatubo",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1992,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": -0.36,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "1991: Mount Pinatubo erupts.",
+                "Its haze cools 1992 [5]"
+              ]
+            }
+          }
+        },
+        {
+          "description": "Bracket under 1944–1972",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#5c6370",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "datum": 1944,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": -0.26,
+              "type": "quantitative"
+            },
+            "x2": {
+              "datum": 1972
+            },
+            "y2": {
+              "datum": -0.26
+            }
+          }
+        },
+        {
+          "description": "Bracket end",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#5c6370",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "datum": 1944,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": -0.26,
+              "type": "quantitative"
+            },
+            "x2": {
+              "datum": 1944
+            },
+            "y2": {
+              "datum": -0.2
+            }
+          }
+        },
+        {
+          "description": "Bracket end",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#5c6370",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "datum": 1972,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": -0.26,
+              "type": "quantitative"
+            },
+            "x2": {
+              "datum": 1972
+            },
+            "y2": {
+              "datum": -0.2
+            }
+          }
+        },
+        {
+          "description": "Note: aerosol pollution (halo)",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370",
+            "stroke": "#f2eee6",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1956,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": -0.31,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "1950s–70s: smog from the same industry",
+                "reflects sunlight and slows the rise [3]"
+              ]
+            }
+          }
+        },
+        {
+          "description": "Note: aerosol pollution",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1956,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": -0.31,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "1950s–70s: smog from the same industry",
+                "reflects sunlight and slows the rise [3]"
+              ]
+            }
+          }
+        },
+        {
+          "description": "Leader line from 1998 to the El Niño note",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#5c6370",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "datum": 1998,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 0.66,
+              "type": "quantitative"
+            },
+            "x2": {
+              "datum": 1998
+            },
+            "y2": {
+              "datum": 0.71
+            }
+          }
+        },
+        {
+          "description": "Leader line from the El Niño note to 2016",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#5c6370",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "datum": 2009.2,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 0.995,
+              "type": "quantitative"
+            },
+            "x2": {
+              "datum": 2015.2
+            },
+            "y2": {
+              "datum": 1.0
+            }
+          }
+        },
+        {
+          "description": "Note: El Niño (halo)",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370",
+            "stroke": "#f2eee6",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1981,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.16,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "El Niño: every few years the",
+                "Pacific Ocean warms and lifts",
+                "world temperature for about a",
+                "year, as in 1998 and 2016 [4]"
+              ]
+            }
+          }
+        },
+        {
+          "description": "Note: El Niño",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1981,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.16,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "El Niño: every few years the",
+                "Pacific Ocean warms and lifts",
+                "world temperature for about a",
+                "year, as in 1998 and 2016 [4]"
+              ]
+            }
+          }
+        },
+        {
+          "description": "Annotation: permanent marker on the record year (2024), so the label points at the right dot",
+          "transform": [
+            {
+              "filter": "datum.year == 2024"
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "shape": "circle",
+            "filled": true,
+            "size": 55,
+            "color": "#1f2328",
+            "stroke": "#f2eee6",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "annual",
               "type": "quantitative"
             }
           }
@@ -348,26 +974,69 @@
               {
                 "field": "annual",
                 "type": "quantitative",
-                "title": "Difference from 1951–1980 (°C)",
+                "title": "vs 1951–1980 (°C)",
                 "format": "+.2f"
               },
               {
                 "field": "mean_10yr",
                 "type": "quantitative",
-                "title": "Average of previous 10 years (°C)",
+                "title": "10-year average (°C)",
                 "format": "+.2f"
+              },
+              {
+                "field": "window10",
+                "title": "10 years averaged"
               },
               {
                 "field": "vs_1880_1900",
                 "type": "quantitative",
-                "title": "Difference from 1880–1900 (°C)",
+                "title": "vs 1880–1900 (°C)",
                 "format": "+.2f"
               }
             ]
+          },
+          "transform": [
+            {
+              "calculate": "(datum.year - 9) + '–' + datum.year",
+              "as": "window10"
+            }
+          ]
+        },
+        {
+          "description": "Legend sample: world 10-year average",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#1f2328",
+            "strokeWidth": 2.5
+          },
+          "encoding": {
+            "x": {
+              "datum": 1883,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "x2": {
+              "datum": 1889
+            },
+            "y": {
+              "datum": 1.32,
+              "type": "quantitative"
+            }
           }
         },
         {
-          "description": "Mini legend in the empty top-left corner (replaces a label that collided with the line): red line",
+          "description": "Legend label",
           "data": {
             "values": [
               {}
@@ -379,6 +1048,158 @@
             "baseline": "middle",
             "fontSize": 11,
             "fontWeight": 600,
+            "lineHeight": 14,
+            "color": "#1f2328"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1891,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.32,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "World, 10-year average"
+            }
+          }
+        },
+        {
+          "description": "Legend sample: world single year",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "color": "#b5afa5",
+            "strokeWidth": 1.5
+          },
+          "encoding": {
+            "x": {
+              "datum": 1883,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "x2": {
+              "datum": 1889
+            },
+            "y": {
+              "datum": 1.16,
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "description": "Legend label",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1891,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 1.16,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": "World, single year"
+            }
+          }
+        },
+        {
+          "description": "Annotation: main driver (greenhouse gases) (halo)",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
+            "color": "#5c6370",
+            "stroke": "#f2eee6",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "x": {
+              "datum": 1883,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  1880,
+                  2026
+                ],
+                "nice": false
+              }
+            },
+            "y": {
+              "datum": 0.98,
+              "type": "quantitative"
+            },
+            "text": {
+              "value": [
+                "Main cause of the long rise: carbon dioxide",
+                "from burning coal, oil and gas, building up",
+                "since the Industrial Revolution [1, 2]"
+              ]
+            }
+          }
+        },
+        {
+          "description": "Annotation: main driver (greenhouse gases)",
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "top",
+            "fontSize": 11,
+            "fontWeight": 400,
+            "lineHeight": 14,
             "color": "#1f2328"
           },
           "encoding": {
@@ -394,47 +1215,15 @@
               }
             },
             "y": {
-              "datum": 1.3,
+              "datum": 0.98,
               "type": "quantitative"
             },
             "text": {
-              "value": "10-year average"
-            }
-          }
-        },
-        {
-          "description": "Mini legend: grey line",
-          "data": {
-            "values": [
-              {}
-            ]
-          },
-          "mark": {
-            "type": "text",
-            "align": "left",
-            "baseline": "middle",
-            "fontSize": 11,
-            "fontWeight": 400,
-            "color": "#5c6370"
-          },
-          "encoding": {
-            "x": {
-              "datum": 1883,
-              "type": "quantitative",
-              "scale": {
-                "domain": [
-                  1880,
-                  2026
-                ],
-                "nice": false
-              }
-            },
-            "y": {
-              "datum": 1.13,
-              "type": "quantitative"
-            },
-            "text": {
-              "value": "Single year"
+              "value": [
+                "Main cause of the long rise: carbon dioxide",
+                "from burning coal, oil and gas, building up",
+                "since the Industrial Revolution [1, 2]"
+              ]
             }
           }
         }

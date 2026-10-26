@@ -564,6 +564,7 @@ h2 { font-size: 1.5rem; }
 /* Colour key swatches in the reading guide */
 .swatch-nodata { background: #d3cdc2; }
 .swatch-rate   { background: #5e3c99; }
+.swatch-time   { background: #228058; }
 .swatch-cool   { background: #2166ac; }
 .swatch-warm   { background: #b2182b; }
 .swatch { border: 1px solid rgba(0,0,0,0.12); margin-left: 2px; }
@@ -591,3 +592,145 @@ p,
 
 .lede { max-width: 44ch; }
 .key-label { max-width: 32ch; }
+
+/* ---- Revision: colour key, captions, no part labels -------------------- */
+.reading-guide { padding: 16px 24px 4px; }
+.reading-guide .guide-title { margin-bottom: 10px; }
+
+/* Captions: one plain sentence on how the chart works, then (only where the
+   chart has an interaction) a separate action line marked with a pointer icon */
+.caption-action {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.action-icon {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  position: relative;
+  top: 1px;
+}
+
+/* Part labels were removed, so headings sit directly under the section rule */
+.part-head h2 { margin-top: 0; }
+
+/* Rows with two charts: a two-row grid (charts, then captions) shared by both
+   columns through subgrid, so both captions start on the same line directly
+   under the taller chart. Phones keep the stacked single column. */
+@media screen and (min-width: 48em) {
+  .fig-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .fig-row > .col {
+    width: auto;
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+  .fig-row > .col > .figure { display: contents; }
+  .fig-row > .col > .figure > .caption { margin-top: 0; padding-top: 10px; }
+}
+
+/* ---- Reading guide row: guide text (left) | key number (right) ----------- */
+.guide-row { margin-top: 28px; }
+.guide-row .reading-guide {
+  margin-top: 0;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px 24px 8px;
+}
+.guide-row .reading-guide p:last-child { margin-bottom: 0.8em; }
+@media (max-width: 767px) {
+  .guide-row > .col + .col { margin-top: 16px; }
+}
+.guide-row .reading-guide p { max-width: 50ch; }
+/* The third tile stretches to the guide's height: centre its content */
+.guide-row .stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Reading guide as a plain paragraph: no box, aligned with the text above */
+.guide-row .reading-guide {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  height: auto;
+  max-width: 50ch;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #4d535c;
+  align-self: center;
+}
+.guide-row .reading-guide strong { color: var(--ink); font-weight: 600; }
+.guide-row > .col:first-child { display: flex; align-items: center; }
+
+/* Guide text uses the intro (lede) style; just vertically centred beside the tile */
+.guide-row .guide-text { margin: 0; }
+
+/* Reference numbers in the text, and the reference list in the footer */
+sup.ref { font-size: 0.7em; line-height: 0; margin-left: 1px; }
+sup.ref a { color: var(--accent); text-decoration: none; font-weight: 600; }
+sup.ref a:hover { text-decoration: underline; }
+.refs {
+  margin: 0;
+  padding-left: 1.4em;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: #4d535c;
+  max-width: 52ch;
+}
+.refs li { margin-bottom: 6px; }
+.refs li:target { background: #f6e3c8; }
+
+/* ---- Typography and spacing consistency pass ---------------------------
+   One body style for all running text (intro included), one tile style for
+   all key numbers, one gap between stacked tiles, one small-text style. */
+.hero .section-intro { max-width: none; }
+.byline { margin-bottom: 16px; }
+.stat-stack { gap: 24px; }
+.stat-stack .key-figure { flex: 1; }
+.site-footer p { font-size: 0.85rem; line-height: 1.6; }
+@media (max-width: 767px) {
+  .stat-stack { margin-top: 20px; }
+}
+.nowrap { white-space: nowrap; }
+.stat-stack .key-label { max-width: none; }
+
+/* Footer: references continue from the left column into the right */
+.site-footer .refs { margin-bottom: 14px; max-width: 50ch; }
+.site-footer .col > :last-child { margin-bottom: 0; }
+
+/* ---- Spacing rhythm (consistency pass) ----------------------------------
+   One vertical rhythm: 48px between sections, 32px from a section's rule to
+   its heading, 32px between the text block and the first chart, and 32px
+   between charts. */
+.hero { padding-bottom: 48px; }
+.part { padding-top: 32px; margin-bottom: 48px; }
+.part-conclusion { margin-bottom: 48px; }
+.part-head { margin-bottom: 32px; }
+.figure { margin-bottom: 32px; }
+.site-footer { padding-top: 32px; }
+
+/* Headings are written to fit on one line; if a narrow screen forces a
+   wrap, balance the lines so no single word is left on its own */
+h1, h2 { text-wrap: balance; }
+
+/* Avoid one-word last lines in running text (supported in Chrome/Edge/Safari) */
+p, li, dd { text-wrap: pretty; }
+.col .key-figure p.key-label { max-width: none; }
+
+/* A caption that is only an instruction starts at the same line as a
+   normal caption next to it (no extra top margin on the instruction) */
+.caption > .caption-action:first-child { margin-top: 0; }
+.caption-action { align-items: flex-start; }
+.caption-action .action-icon { margin-top: 0.4em; top: 0; }

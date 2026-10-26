@@ -15,7 +15,7 @@ const VISUALISATIONS = [
   { id: "#vis-global-trend",   spec: "specs/line_heatmap_global.json" },
   // Part 2: is warming speeding up?
   { id: "#vis-decade-rate",    spec: "specs/lollipop_decade_rate.json" },
-  { id: "#vis-hottest-years",  spec: "specs/bump_hottest_years.json" },
+  { id: "#vis-records",        spec: "specs/records_timeline.json" },
   // Part 3: where is it warming?
   { id: "#vis-map-choropleth", spec: "specs/map_choropleth_year.json" },
   { id: "#vis-map-grid",       spec: "specs/map_bin_grid.json" },
@@ -63,6 +63,8 @@ const THEME = {
     color: "#1f2328",
     subtitleColor: "#5c6370",
     subtitleFontSize: 12,
+    subtitleLineHeight: 17,          // room between subtitle lines
+    subtitlePadding: 5,              // gap between title and subtitle
     anchor: "start",
     offset: 12
   }
@@ -91,6 +93,16 @@ function fitToWidth(spec, containerWidth) {
   const usable = Math.max(240, containerWidth - (r.reserve || 0));
   if (r.layout === "vconcat") {
     s.vconcat.forEach((view) => { view.width = usable; });
+    // On narrow screens, drop annotation layers that would collide
+    // (layers whose "description" starts with one of r.hideLayers)
+    if (r.hideBelow && containerWidth < r.hideBelow && r.hideLayers) {
+      s.vconcat.forEach((view) => {
+        if (view.layer) {
+          view.layer = view.layer.filter((l) =>
+            !r.hideLayers.some((p) => (l.description || "").startsWith(p)));
+        }
+      });
+    }
   } else if (r.layout === "butterfly") {
     const side = Math.max(100, Math.floor((usable - (r.middle || 60)) / 2));
     s.hconcat[0].width = side;

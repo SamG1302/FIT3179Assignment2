@@ -4,7 +4,7 @@
   "usermeta": {
     "responsive": {
       "layout": "butterfly",
-      "reserve": 84,
+      "reserve": 20,
       "middle": 90
     }
   },
@@ -14,7 +14,7 @@
       "Global land, change since the 1950s, °C · Berkeley Earth",
       "Data end in 2015, so the 2010s cover 2010–2015 only"
     ],
-    "anchor": "middle"
+    "anchor": "start"
   },
   "data": {
     "url": "data/be_global_land.csv"
@@ -127,7 +127,7 @@
             "nice": false
           },
           "axis": {
-            "format": ".1f",
+            "format": "+.1f",
             "values": [
               0,
               0.5,
@@ -258,7 +258,7 @@
             "nice": false
           },
           "axis": {
-            "format": ".1f",
+            "format": "+.1f",
             "values": [
               0,
               0.5,

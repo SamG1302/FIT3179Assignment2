@@ -109,6 +109,35 @@
       }
     },
     {
+      "description": "Label for the dashed zero line, just above the first row",
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "color": "#5c6370",
+        "align": "left",
+        "baseline": "bottom",
+        "dx": 4,
+        "dy": -2
+      },
+      "encoding": {
+        "x": {
+          "datum": 0,
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 0
+        },
+        "text": {
+          "value": "Dashed line: no warming"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.map_id == 'AUS'"
+        }
+      ]
+    },
+    {
       "description": "Bar of the dumbbell: from the old rate to the new rate",
       "mark": {
         "type": "rule",
@@ -194,7 +223,8 @@
           },
           "legend": {
             "orient": "top",
-            "direction": "horizontal"
+            "direction": "horizontal",
+            "offset": 22
           }
         },
         "tooltip": [

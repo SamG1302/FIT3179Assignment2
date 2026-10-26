@@ -1,11 +1,11 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Jitter plot: every country's decade-average anomaly (OWID / ERA5, re-baselined to each country's 1951–1980 mean), one dot per country per decade. Dots are spread sideways by a fixed pseudo-random offset (stable between page loads). Black dashes = median country. The dropdown highlights one country's path; Australia by default.",
+  "description": "Jitter plot: every country's decade-average anomaly (OWID / ERA5, re-baselined to each country's 1951–1980 mean), one dot per country per decade. Dots are spread sideways by a fixed pseudo-random offset (stable between page loads). Black dashes = median country. The dropdown highlights one country's path; Australia by default. A small key in the empty top-left corner explains each mark in plain words (each key layer filters the main data down to one row, because the top-level transforms also apply to layers), so no statistics knowledge is needed.",
   "title": {
     "text": "Every country, decade by decade",
     "subtitle": [
-      "Decade average vs each country's 1951–1980 average, °C",
-      "Grey dash = middle (median) country · Our World in Data (ERA5)"
+      "Each country's decade average compared with its own 1951–1980 average, °C",
+      "Our World in Data (ERA5)"
     ]
   },
   "width": "container",
@@ -183,7 +183,7 @@
     "y": {
       "field": "anomaly",
       "type": "quantitative",
-      "title": "Anomaly (°C)",
+      "title": "Warmer (+) or cooler (−) than 1951–1980 (°C)",
       "axis": {
         "format": "+.1f"
       }
@@ -411,6 +411,327 @@
       "encoding": {
         "text": {
           "field": "lab"
+        }
+      }
+    },
+    {
+      "description": "Key: grey dot sample",
+      "mark": {
+        "type": "circle",
+        "size": 40,
+        "color": "#b5afa5",
+        "opacity": 0.9
+      },
+      "encoding": {
+        "x": {
+          "datum": 1943,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 2.85,
+          "type": "quantitative"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ]
+    },
+    {
+      "description": "Key: median dash sample",
+      "mark": {
+        "type": "rule",
+        "color": "#5c6370",
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "x": {
+          "datum": 1941.3,
+          "type": "quantitative"
+        },
+        "x2": {
+          "datum": 1944.7
+        },
+        "y": {
+          "datum": 2.6,
+          "type": "quantitative"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ]
+    },
+    {
+      "description": "Key: highlighted country sample",
+      "mark": {
+        "type": "circle",
+        "size": 80,
+        "color": "#1f2328",
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "datum": 1943,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 2.35,
+          "type": "quantitative"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ]
+    },
+    {
+      "description": "Key text: One country, one decade",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "color": "#1f2328",
+        "fontWeight": 400
+      },
+      "encoding": {
+        "x": {
+          "datum": 1946.5,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 2.85,
+          "type": "quantitative"
+        },
+        "text": {
+          "condition": {
+            "test": "width < 260",
+            "value": ""
+          },
+          "value": "One country, one decade"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ]
+    },
+    {
+      "description": "Key text: Middle country: half are above it",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "color": "#1f2328",
+        "fontWeight": 400
+      },
+      "encoding": {
+        "x": {
+          "datum": 1946.5,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 2.6,
+          "type": "quantitative"
+        },
+        "text": {
+          "condition": {
+            "test": "width < 260",
+            "value": ""
+          },
+          "value": "Middle country: half are above it"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ]
+    },
+    {
+      "description": "Key text: Country chosen in the list below",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "color": "#1f2328",
+        "fontWeight": 400
+      },
+      "encoding": {
+        "x": {
+          "datum": 1946.5,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 2.35,
+          "type": "quantitative"
+        },
+        "text": {
+          "condition": {
+            "test": "width < 260",
+            "value": ""
+          },
+          "value": "Country chosen in the list below"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ]
+    },
+    {
+      "description": "Key text: Spread sideways only to avoid overlap",
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 11,
+        "color": "#5c6370",
+        "fontWeight": 400,
+        "lineHeight": 14
+      },
+      "encoding": {
+        "x": {
+          "datum": 1946.5,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 1.92,
+          "type": "quantitative"
+        },
+        "text": {
+          "condition": {
+            "test": "width < 260",
+            "value": ""
+          },
+          "value": [
+            "Dots spread sideways only",
+            "so they don't overlap"
+          ]
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ]
+    },
+    {
+      "description": "Annotation: what the shift means, using the 2020s median (computed)",
+      "transform": [
+        {
+          "filter": "datum.decade == 2020"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "median",
+              "field": "anomaly",
+              "as": "m"
+            }
+          ]
+        },
+        {
+          "filter": "datum.row == 1"
+        },
+        {
+          "calculate": "['The whole cloud has moved up: in', 'the 2020s the middle country is ' + format(datum.m, '+.1f') + '°C']",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 11,
+        "color": "#1f2328",
+        "lineHeight": 14
+      },
+      "encoding": {
+        "x": {
+          "datum": 2029,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": -0.45,
+          "type": "quantitative"
+        },
+        "text": {
+          "condition": {
+            "test": "width < 300",
+            "value": ""
+          },
+          "field": "lab"
+        }
+      }
+    },
+    {
+      "description": "Key: dashed zero line sample",
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#9a968e",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "datum": 1941.3,
+          "type": "quantitative"
+        },
+        "x2": {
+          "datum": 1944.7
+        },
+        "y": {
+          "datum": 2.1,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "description": "Key text: dashed line",
+      "transform": [
+        {
+          "filter": "datum.decade == 1940 && datum.row == 1"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "x": {
+          "datum": 1946.5,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 2.1,
+          "type": "quantitative"
+        },
+        "text": {
+          "condition": {
+            "test": "width < 260",
+            "value": ""
+          },
+          "value": "No change from 1951–1980"
         }
       }
     }

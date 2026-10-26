@@ -1,11 +1,12 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "MAP IDIOM 3 (bin map): warming rate since 1980 in 5° x 5° grid cells (Berkeley Earth), land and ocean. Uses the same Equal Earth projection as the choropleth so the two can be compared fairly. Squares come from be_grid_cells.geojson; the rate (rate_recent) is a least-squares slope of annual means 1980–2025, computed in prep_data.R.",
+  "description": "MAP IDIOM 3 (bin map): for each 5° x 5° grid cell (Berkeley Earth, land and ocean), the decade from which every decade has averaged at least +1°C above the cell's 1951–1980 average. 'Stayed above' rather than 'first reached' so that one-off warm spells (e.g. the 1930s Arctic) do not count. Squares come from be_grid_cells.geojson; the decade comes from be_grid_first_1c.csv (prep_data.R, section 10), joined on id. Click a legend entry to show one group.",
   "title": {
-    "text": "How fast each part of the world has warmed since 1980",
+    "text": "When each place passed +1°C and stayed there",
     "subtitle": [
-      "Warming rate in 5° grid cells, °C per decade, 1980–2025",
-      "Berkeley Earth · land and ocean · grey = no data"
+      "Decade from which it has stayed 1°C or more above",
+      "its 1951–1980 average · Berkeley Earth 5° grid",
+      "Land and ocean · 2020s = 2020–2025"
     ]
   },
   "width": "container",
@@ -26,7 +27,7 @@
       }
     },
     {
-      "description": "One square per 5° cell, coloured by its warming rate",
+      "description": "One square per 5° cell, coloured by the decade it passed +1°C for good",
       "data": {
         "url": "data/be_grid_cells.geojson",
         "format": {
@@ -36,19 +37,45 @@
       },
       "transform": [
         {
-          "filter": "isValid(datum.properties.rate_recent)"
+          "lookup": "properties.id",
+          "from": {
+            "data": {
+              "url": "data/be_grid_first_1c.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "id": "number",
+                  "stayed_from": "number",
+                  "latest": "number"
+                }
+              }
+            },
+            "key": "id",
+            "fields": [
+              "stayed_from",
+              "latest"
+            ]
+          }
         },
         {
-          "calculate": "datum.properties.rate_recent",
-          "as": "rate"
+          "calculate": "datum.stayed_from >= 1900 ? (datum.stayed_from < 2000 ? 'Before 2000' : datum.stayed_from == 2020 ? '2020–2025' : datum.stayed_from + 's') : 'Not yet'",
+          "as": "period"
         },
         {
           "calculate": "datum.properties.land >= 0.5 ? 'Mostly land' : 'Mostly ocean'",
           "as": "surface"
-        },
+        }
+      ],
+      "params": [
         {
-          "calculate": "datum.properties.change",
-          "as": "change"
+          "name": "pick",
+          "select": {
+            "type": "point",
+            "fields": [
+              "period"
+            ]
+          },
+          "bind": "legend"
         }
       ],
       "mark": {
@@ -58,61 +85,58 @@
       },
       "encoding": {
         "color": {
-          "field": "rate",
-          "type": "quantitative",
-          "title": "Warming rate, °C per decade (1980–2025)",
+          "field": "period",
+          "type": "ordinal",
+          "title": "Above +1°C for good since…",
           "scale": {
             "domain": [
-              -0.5,
-              -0.333,
-              -0.167,
-              0,
-              0.5,
-              1.0,
-              1.5
+              "Before 2000",
+              "2000s",
+              "2010s",
+              "2020–2025",
+              "Not yet"
             ],
             "range": [
-              "#2166ac",
-              "#67a9cf",
-              "#d1e5f0",
-              "#ffffff",
-              "#fddbc7",
-              "#ef8a62",
-              "#b2182b"
-            ],
-            "clamp": true
+              "#0a4f3c",
+              "#228058",
+              "#55b07a",
+              "#a9dcb3",
+              "#ffffff"
+            ]
           },
           "legend": {
             "orient": "bottom",
             "direction": "horizontal",
-            "gradientLength": 260,
-            "format": "+.1f",
+            "symbolType": "square",
+            "symbolSize": 140,
+            "symbolStrokeColor": "#9a968e",
+            "symbolStrokeWidth": 0.5,
+            "columnPadding": 14,
             "offset": 16,
             "titlePadding": 6,
-            "values": [
-              -0.5,
-              0,
-              0.5,
-              1,
-              1.5
-            ]
+            "columns": 3
           }
+        },
+        "opacity": {
+          "condition": {
+            "param": "pick",
+            "value": 1
+          },
+          "value": 0.15
         },
         "tooltip": [
           {
             "field": "surface",
-            "title": "Grid cell"
+            "title": "Grid square"
           },
           {
-            "field": "rate",
-            "type": "quantitative",
-            "title": "Warming rate since 1980 (°C per decade)",
-            "format": "+.2f"
+            "field": "period",
+            "title": "Above +1°C for good since"
           },
           {
-            "field": "change",
+            "field": "latest",
             "type": "quantitative",
-            "title": "1996–2025 vs 1951–1980 (°C)",
+            "title": "2020–2025 average vs 1951–1980 (°C)",
             "format": "+.2f"
           }
         ]
@@ -136,31 +160,91 @@
       }
     },
     {
+      "description": "Annotation: earliest region (halo); placed in the empty corner beside the map so it covers no squares; hidden below 880px",
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "stroke": "#f2eee6",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "text": {
+          "condition": {
+            "test": "width < 880",
+            "value": ""
+          },
+          "value": [
+            "Arctic: above +1°C",
+            "since the 1990s or 2000s"
+          ]
+        },
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": 0
+        }
+      },
+      "data": {
+        "values": [
+          {}
+        ]
+      }
+    },
+    {
+      "description": "Annotation: earliest region; placed in the empty corner beside the map so it covers no squares; hidden below 880px",
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "lineHeight": 14,
+        "color": "#1f2328"
+      },
+      "encoding": {
+        "text": {
+          "condition": {
+            "test": "width < 880",
+            "value": ""
+          },
+          "value": [
+            "Arctic: above +1°C",
+            "since the 1990s or 2000s"
+          ]
+        },
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": 0
+        }
+      },
+      "data": {
+        "values": [
+          {}
+        ]
+      }
+    },
+    {
+      "description": "Annotation: largest 'not yet' area (halo); hidden on narrow screens, where it would cover the map",
       "data": {
         "values": [
           {
-            "lon": 68,
-            "lat": 79
+            "lon": -150,
+            "lat": -8
           }
         ]
       },
-      "encoding": {
-        "longitude": {
-          "field": "lon",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "lat",
-          "type": "quantitative"
-        },
-        "text": {
-          "value": [
-            "Barents and Kara Seas:",
-            "up to +1.5°C per decade"
-          ]
-        }
-      },
-      "description": "Annotation: fastest-warming cells (halo)",
       "mark": {
         "type": "text",
         "align": "left",
@@ -171,16 +255,6 @@
         "stroke": "#f2eee6",
         "strokeWidth": 4,
         "strokeJoin": "round"
-      }
-    },
-    {
-      "data": {
-        "values": [
-          {
-            "lon": 68,
-            "lat": 79
-          }
-        ]
       },
       "encoding": {
         "longitude": {
@@ -192,13 +266,27 @@
           "type": "quantitative"
         },
         "text": {
+          "condition": {
+            "test": "width < 760",
+            "value": ""
+          },
           "value": [
-            "Barents and Kara Seas:",
-            "up to +1.5°C per decade"
+            "Eastern tropical Pacific:",
+            "not there yet"
           ]
         }
+      }
+    },
+    {
+      "description": "Annotation: largest 'not yet' area; hidden on narrow screens, where it would cover the map",
+      "data": {
+        "values": [
+          {
+            "lon": -150,
+            "lat": -8
+          }
+        ]
       },
-      "description": "Annotation: fastest-warming cells",
       "mark": {
         "type": "text",
         "align": "left",
@@ -207,16 +295,6 @@
         "fontWeight": 600,
         "lineHeight": 14,
         "color": "#1f2328"
-      }
-    },
-    {
-      "data": {
-        "values": [
-          {
-            "lon": -150,
-            "lat": -63
-          }
-        ]
       },
       "encoding": {
         "longitude": {
@@ -228,59 +306,95 @@
           "type": "quantitative"
         },
         "text": {
+          "condition": {
+            "test": "width < 760",
+            "value": ""
+          },
           "value": [
-            "Southern Ocean:",
-            "little change"
+            "Eastern tropical Pacific:",
+            "not there yet"
           ]
         }
-      },
-      "description": "Annotation: slowest cells (halo)",
+      }
+    },
+    {
+      "description": "Annotation: Australia (halo); placed in the empty corner beside the map so it covers no squares; hidden below 880px",
       "mark": {
         "type": "text",
-        "align": "left",
-        "baseline": "middle",
+        "align": "right",
+        "baseline": "bottom",
         "fontSize": 11,
         "fontWeight": 600,
         "lineHeight": 14,
         "stroke": "#f2eee6",
         "strokeWidth": 4,
         "strokeJoin": "round"
+      },
+      "encoding": {
+        "text": {
+          "condition": {
+            "test": "width < 880",
+            "value": ""
+          },
+          "value": [
+            "Australia: 11 of 27 land",
+            "squares, mostly since 2020"
+          ]
+        },
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "height"
+          }
+        }
+      },
+      "data": {
+        "values": [
+          {}
+        ]
       }
     },
     {
-      "data": {
-        "values": [
-          {
-            "lon": -150,
-            "lat": -63
-          }
-        ]
-      },
-      "encoding": {
-        "longitude": {
-          "field": "lon",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "lat",
-          "type": "quantitative"
-        },
-        "text": {
-          "value": [
-            "Southern Ocean:",
-            "little change"
-          ]
-        }
-      },
-      "description": "Annotation: slowest cells",
+      "description": "Annotation: Australia; placed in the empty corner beside the map so it covers no squares; hidden below 880px",
       "mark": {
         "type": "text",
-        "align": "left",
-        "baseline": "middle",
+        "align": "right",
+        "baseline": "bottom",
         "fontSize": 11,
         "fontWeight": 600,
         "lineHeight": 14,
         "color": "#1f2328"
+      },
+      "encoding": {
+        "text": {
+          "condition": {
+            "test": "width < 880",
+            "value": ""
+          },
+          "value": [
+            "Australia: 11 of 27 land",
+            "squares, mostly since 2020"
+          ]
+        },
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": {
+            "expr": "height"
+          }
+        }
+      },
+      "data": {
+        "values": [
+          {}
+        ]
       }
     }
   ]

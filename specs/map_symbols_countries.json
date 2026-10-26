@@ -123,7 +123,8 @@
             "symbolFillColor": "#8a8494",
             "symbolStrokeColor": "#f2eee6",
             "offset": 16,
-            "titlePadding": 6
+            "titlePadding": 6,
+            "symbolOffset": 0
           }
         },
         "color": {
@@ -142,9 +143,13 @@
           },
           "legend": {
             "orient": "bottom",
-            "direction": "horizontal",
+            "direction": "vertical",
             "offset": 16,
-            "titlePadding": 6
+            "titlePadding": 6,
+            "columns": 1,
+            "rowPadding": 6,
+            "symbolSize": 110,
+            "labelOffset": 6
           }
         },
         "opacity": {
@@ -188,8 +193,8 @@
       "data": {
         "values": [
           {
-            "lon": -30,
-            "lat": 58
+            "lon": -22,
+            "lat": 42
           }
         ]
       },
@@ -203,13 +208,18 @@
           "type": "quantitative"
         },
         "text": {
+          "condition": {
+            "test": "width < 700",
+            "value": ""
+          },
           "value": [
-            "Europe and the Middle East:",
-            "largest speed-ups"
+            "Europe and the",
+            "Middle East: largest",
+            "speed-ups"
           ]
         }
       },
-      "description": "Annotation: cluster of large purple circles (halo)",
+      "description": "Annotation: cluster of large purple circles (halo); sits in the empty North Atlantic beside the cluster, hidden below 700px where it would cover circles",
       "mark": {
         "type": "text",
         "align": "right",
@@ -226,8 +236,8 @@
       "data": {
         "values": [
           {
-            "lon": -30,
-            "lat": 58
+            "lon": -22,
+            "lat": 42
           }
         ]
       },
@@ -241,13 +251,18 @@
           "type": "quantitative"
         },
         "text": {
+          "condition": {
+            "test": "width < 700",
+            "value": ""
+          },
           "value": [
-            "Europe and the Middle East:",
-            "largest speed-ups"
+            "Europe and the",
+            "Middle East: largest",
+            "speed-ups"
           ]
         }
       },
-      "description": "Annotation: cluster of large purple circles",
+      "description": "Annotation: cluster of large purple circles; sits in the empty North Atlantic beside the cluster, hidden below 700px where it would cover circles",
       "mark": {
         "type": "text",
         "align": "right",
@@ -258,5 +273,16 @@
         "color": "#1f2328"
       }
     }
-  ]
+  ],
+  "config": {
+    "legend": {
+      "layout": {
+        "bottom": {
+          "anchor": "start",
+          "direction": "horizontal",
+          "margin": 40
+        }
+      }
+    }
+  }
 }

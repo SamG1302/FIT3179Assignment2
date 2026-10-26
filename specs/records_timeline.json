@@ -1,0 +1,344 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Record timeline (NASA GISTEMP v4): every year that was warmer than all the years before it. A running maximum (window transform) finds the records; dot size shows how much each one beat the previous record. Replaces the bump chart of the 10 hottest years.",
+  "title": {
+    "text": "New heat records are arriving faster",
+    "subtitle": [
+      "Years warmer than every year before them, °C vs 1951–1980",
+      "Bigger dot = beat the old record by more · NASA GISTEMP v4"
+    ]
+  },
+  "width": "container",
+  "height": 300,
+  "layer": [
+    {
+      "description": "Shaded gap: 1944 to 1980, no new record",
+      "data": {
+        "values": [
+          {
+            "x": 1944,
+            "x2": 1980
+          }
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#e3ddd2"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1878,
+              2027
+            ],
+            "nice": false
+          }
+        },
+        "x2": {
+          "field": "x2"
+        }
+      }
+    },
+    {
+      "description": "Gap label",
+      "data": {
+        "values": [
+          {
+            "x": 1962,
+            "y": 0.95
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#5c6370",
+        "lineHeight": 14
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1878,
+              2027
+            ],
+            "nice": false
+          }
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "36 years",
+            "with no",
+            "new record"
+          ]
+        }
+      }
+    },
+    {
+      "description": "Records: running maximum up to each year (window), then the previous year's running maximum (lag); a record is a year above it",
+      "data": {
+        "url": "data/gistemp_global.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "annual": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.annual) && datum.year <= 2025"
+        },
+        {
+          "window": [
+            {
+              "op": "max",
+              "field": "annual",
+              "as": "run_max"
+            }
+          ],
+          "frame": [
+            null,
+            0
+          ],
+          "sort": [
+            {
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "window": [
+            {
+              "op": "lag",
+              "field": "run_max",
+              "as": "prev_max"
+            }
+          ],
+          "sort": [
+            {
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filter": "!isValid(datum.prev_max) || datum.annual > datum.prev_max"
+        },
+        {
+          "window": [
+            {
+              "op": "lag",
+              "field": "year",
+              "as": "prev_year"
+            }
+          ],
+          "sort": [
+            {
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "calculate": "isValid(datum.prev_max) ? datum.annual - datum.prev_max : null",
+          "as": "margin"
+        },
+        {
+          "calculate": "isValid(datum.margin) ? datum.margin : 0.05",
+          "as": "size_value"
+        },
+        {
+          "calculate": "isValid(datum.prev_year) ? 'Beat ' + datum.prev_year + ' by ' + format(datum.margin, '.2f') + '°C' + (datum.year - datum.prev_year > 1 ? ', after ' + (datum.year - datum.prev_year) + ' years' : ', the year after') : 'First year in the record'",
+          "as": "beat"
+        },
+        {
+          "calculate": "indexof([1900, 1937, 1980, 1998, 2016, 2024], datum.year) >= 0 ? '' + datum.year : ''",
+          "as": "label"
+        },
+        {
+          "calculate": "datum.year == 1944 ? '1944' : ''",
+          "as": "label_right"
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1878,
+              2027
+            ],
+            "nice": false
+          },
+          "title": "Year the record was set",
+          "axis": {
+            "format": "d",
+            "grid": false,
+            "values": [
+              1880,
+              1920,
+              1960,
+              2000
+            ]
+          }
+        },
+        "y": {
+          "field": "annual",
+          "type": "quantitative",
+          "title": "Record (°C)",
+          "scale": {
+            "domain": [
+              -0.4,
+              1.4
+            ],
+            "nice": false
+          },
+          "axis": {
+            "format": "+.1f",
+            "tickCount": 6,
+            "minExtent": 44
+          }
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "line",
+            "interpolate": "step-after",
+            "color": "#c9c2b6",
+            "strokeWidth": 1.5
+          }
+        },
+        {
+          "mark": {
+            "type": "circle",
+            "color": "#1f2328",
+            "opacity": 1,
+            "stroke": "#f2eee6",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "size": {
+              "field": "size_value",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  0.16
+                ],
+                "range": [
+                  25,
+                  260
+                ]
+              },
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "year",
+                "type": "quantitative",
+                "title": "Record year",
+                "format": "d"
+              },
+              {
+                "field": "annual",
+                "type": "quantitative",
+                "title": "Difference from 1951–1980 (°C)",
+                "format": "+.2f"
+              },
+              {
+                "field": "beat",
+                "title": "Previous record"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -8,
+            "dy": -9,
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#1f2328"
+          },
+          "encoding": {
+            "text": {
+              "field": "label"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 7,
+            "dy": -9,
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#1f2328"
+          },
+          "encoding": {
+            "text": {
+              "field": "label_right"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description": "Annotation: the speed-up in numbers (counts checked against the data)",
+      "data": {
+        "values": [
+          {
+            "x": 1883,
+            "y": 1.32
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 11,
+        "color": "#1f2328",
+        "lineHeight": 15
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1878,
+              2027
+            ],
+            "nice": false
+          }
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": [
+            "1880–1944: 8 records in 64 years",
+            "1980–2024: 14 records in 44 years"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -8,8 +8,8 @@
       "Our World in Data (ERA5)"
     ]
   },
-  "width": 400,
-  "height": 400,
+  "width": 440,
+  "height": 440,
   "view": {
     "stroke": null
   },
@@ -187,7 +187,7 @@
       }
     },
     {
-      "description": "Month labels outside the outer ring",
+      "description": "Month labels (Jan, Feb, ...) outside the outer ring; full names avoid the J/J/J and M/M ambiguity",
       "data": {
         "sequence": {
           "start": 0,
@@ -201,7 +201,7 @@
           "as": "theta_mid"
         },
         {
-          "calculate": "['J','F','M','A','M','J','J','A','S','O','N','D'][datum.month_idx]",
+          "calculate": "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.month_idx]",
           "as": "label"
         }
       ],
@@ -218,7 +218,7 @@
           "scale": null
         },
         "radius": {
-          "value": 200
+          "value": 210
         },
         "text": {
           "field": "label"
