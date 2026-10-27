@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "MAP IDIOM 3 (bin map): for each 5° x 5° grid cell (Berkeley Earth, land and ocean), the decade from which every decade has averaged at least +1°C above the cell's 1951–1980 average. 'Stayed above' rather than 'first reached' so that one-off warm spells (e.g. the 1930s Arctic) do not count. Squares come from be_grid_cells.geojson; the decade comes from be_grid_first_1c.csv (prep_data.R, section 10), joined on id. Click a legend entry to show one group.",
   "title": {
-    "text": "When each place passed +1°C and stayed there",
+    "text": "The Arctic passed +1°C first; much of the ocean has not",
     "subtitle": [
       "Decade from which it has stayed 1°C or more above",
       "its 1951–1980 average · Berkeley Earth 5° grid",

@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "MAP IDIOM 2 (proportional symbol): how much each country's warming rate changed between 1950–1979 and 1980–2025 (OWID / ERA5, owid_country_summary.csv). Circle area = size of the change; dark purple = warming sped up, light purple = warming slowed. Purple is used for rates of change only, never for temperature. Click the legend to show one group.",
   "title": {
-    "text": "Where warming has sped up the most",
+    "text": "Warming sped up most in Europe and the Middle East",
     "subtitle": [
       "Change in warming rate, 1980–2025 vs 1950–1979, °C per decade",
       "Our World in Data (ERA5) · one circle per country"

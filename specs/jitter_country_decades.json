@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Jitter plot: every country's decade-average anomaly (OWID / ERA5, re-baselined to each country's 1951–1980 mean), one dot per country per decade. Dots are spread sideways by a fixed pseudo-random offset (stable between page loads). Black dashes = median country. The dropdown highlights one country's path; Australia by default. A small key in the empty top-left corner explains each mark in plain words (each key layer filters the main data down to one row, because the top-level transforms also apply to layers), so no statistics knowledge is needed.",
   "title": {
-    "text": "Every country, decade by decade",
+    "text": "The whole world has shifted warmer, decade by decade",
     "subtitle": [
       "Each country's decade average compared with its own 1951–1980 average, °C",
       "Our World in Data (ERA5)"

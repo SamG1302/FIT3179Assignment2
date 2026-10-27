@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Dumbbell chart: warming rate per decade in 1950–1979 (grey) vs 1980–2025 (red) for 19 countries (OWID / ERA5, owid_country_summary.csv). Sorted by how much the rate rose. Australia and Malaysia are shaded.",
   "title": {
-    "text": "Warming rate before and after 1980",
+    "text": "Most countries are warming faster than before 1980",
     "subtitle": [
       "°C per decade · Our World in Data (ERA5)",
       "Sorted by how much warming sped up"

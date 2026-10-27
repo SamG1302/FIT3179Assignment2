@@ -776,7 +776,7 @@
           }
         },
         {
-          "description": "Leader line from the El Niño note to 2016",
+          "description": "Leader line from the El Niño note to 2016 (level with the 2016 value, +1.01, so the line is flat)",
           "data": {
             "values": [
               {}
@@ -800,14 +800,14 @@
               }
             },
             "y": {
-              "datum": 0.995,
+              "datum": 1.01,
               "type": "quantitative"
             },
             "x2": {
               "datum": 2015.2
             },
             "y2": {
-              "datum": 1.0
+              "datum": 1.01
             }
           }
         },

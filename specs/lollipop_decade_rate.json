@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Lollipop chart: change in global decade-average anomaly (NASA GISTEMP v4) from one decade to the next. Longer red stems = faster warming.",
   "title": {
-    "text": "How much warmer each decade was than the one before",
+    "text": "Every decade since the 1960s was warmer than the last",
     "subtitle": [
       "Change in decade-average anomaly, °C · NASA GISTEMP v4",
       "2020s = 2020–2025 only (faded)"
@@ -210,38 +210,6 @@
             "format": "+.2f"
           }
         }
-      }
-    },
-    {
-      "description": "Annotation: the run of warmer decades",
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "baseline": "top",
-        "fontSize": 11,
-        "color": "#5c6370",
-        "lineHeight": 14
-      },
-      "encoding": {
-        "x": {
-          "datum": "1890s",
-          "type": "ordinal"
-        },
-        "y": {
-          "datum": 0.3,
-          "type": "quantitative"
-        },
-        "text": {
-          "value": [
-            "Since the 1960s, every decade",
-            "has been warmer than the last"
-          ]
-        }
-      },
-      "data": {
-        "values": [
-          {}
-        ]
       }
     },
     {

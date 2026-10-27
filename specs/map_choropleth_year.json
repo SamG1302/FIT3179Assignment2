@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "MAP IDIOM 1 (choropleth): how much warmer or cooler each country was in a chosen year than its own 1951–1980 average (OWID / Copernicus ERA5, re-baselined in the browser). Year slider 1940–2025. Each country is one national average.",
   "title": {
-    "text": "How much warmer each country was in a chosen year",
+    "text": "By 2025, every country was warmer than in 1951–1980",
     "subtitle": [
       "Annual average vs that country's 1951–1980 average, °C",
       "Our World in Data (Copernicus ERA5) · grey = no data"

@@ -121,13 +121,34 @@ function showError(id, specUrl, err) {
   }
 }
 
+// Chart titles do not wrap by themselves in Vega-Lite. On narrow screens,
+// split a title that is too wide for its container into two balanced lines.
+function wrapTitle(spec, width) {
+  const title = spec.title;
+  if (!title || typeof title.text !== "string" || !width) return spec;
+  const ctx = document.createElement("canvas").getContext("2d");
+  ctx.font = "600 16px 'Source Serif 4', Georgia, serif";
+  if (ctx.measureText(title.text).width <= width - 8) return spec;
+  const words = title.text.split(" ");
+  let best = null;
+  for (let i = 1; i < words.length; i++) {          // most even two-line split
+    const a = words.slice(0, i).join(" "), b = words.slice(i).join(" ");
+    const worst = Math.max(ctx.measureText(a).width, ctx.measureText(b).width);
+    if (!best || worst < best.worst) best = { lines: [a, b], worst };
+  }
+  const s = JSON.parse(JSON.stringify(spec));
+  s.title.text = best.lines;
+  s.title.lineHeight = 20;
+  return s;
+}
+
 async function embed({ id, spec: specUrl }) {
   const el = document.querySelector(id);
   if (!el) return;
   try {
     const spec = await (await fetch(specUrl, { cache: "no-cache" })).json();
     if (!(spec.usermeta && spec.usermeta.responsive)) {
-      await vegaEmbed(id, spec, EMBED_OPTIONS);          // single/layered: "container" handles width
+      await vegaEmbed(id, wrapTitle(spec, el.clientWidth), EMBED_OPTIONS);   // single/layered: "container" handles width
       return;
     }
     let lastWidth = 0;
@@ -137,7 +158,7 @@ async function embed({ id, spec: specUrl }) {
       if (!w || Math.abs(w - lastWidth) < 20) return;    // ignore tiny changes
       lastWidth = w;
       if (view) view.finalize();
-      view = (await vegaEmbed(id, fitToWidth(spec, w), EMBED_OPTIONS)).view;
+      view = (await vegaEmbed(id, wrapTitle(fitToWidth(spec, w), w), EMBED_OPTIONS)).view;
     };
     await draw();
     let timer = null;
@@ -150,4 +171,12 @@ async function embed({ id, spec: specUrl }) {
   }
 }
 
-VISUALISATIONS.forEach(embed);
+// Wait for the web fonts, so chart titles draw in Source Serif 4 and not a fallback font
+const fontsReady = document.fonts
+  ? Promise.all([
+      document.fonts.load("600 16px 'Source Serif 4'"),
+      document.fonts.load("400 12px Inter"),
+      document.fonts.load("600 12px Inter")
+    ]).catch(() => null)
+  : Promise.resolve();
+fontsReady.then(() => VISUALISATIONS.forEach(embed));

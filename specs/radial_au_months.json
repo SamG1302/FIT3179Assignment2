@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Radial heatmap: Australia's average anomaly for each month (slices, clockwise from January at the top) in each decade (rings, 1940s in the centre to 2020s at the edge). OWID / ERA5 monthly data, re-baselined per month to 1951–1980. Geometry is computed in transforms and drawn with scale: null so the angles and radii are exact.",
   "title": {
-    "text": "Australia's year, decade by decade",
+    "text": "Australia: the 2020s were the warmest decade",
     "subtitle": [
       "Monthly anomaly vs 1951–1980, °C · rings: 1940s (centre) → 2020s (edge)",
       "Our World in Data (ERA5)"
